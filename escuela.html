@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituto Carlos Santiago | Inicio - Plataforma Integral</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === VARIABLES Y ESTILOS BASE === */
+        :root {
+            --primary-blue: #0A2540;
+            --secondary-blue: #1E3A8A;
+            --primary-red: #DC2626;
+            --hover-red: #B91C1C;
+            --bg-light: #F9FAFB;
+            --text-dark: #1F2937;
+            --text-light: #FFFFFF;
+            --border-color: #E5E7EB;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
+
+        /* === NAVBAR Y LOGO === */
+        header {
+            background-color: var(--primary-blue); color: var(--text-light);
+            padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: 70px;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
+        .logo i { color: var(--primary-red); font-size: 1.8rem; }
+        .logo span { color: var(--primary-red); }
+
+        nav { display: flex; align-items: center; gap: 20px; }
+        nav a { text-decoration: none; color: white; font-weight: 600; font-size: 1rem; transition: color 0.3s; }
+        nav a:hover { color: var(--primary-red); }
+
+        .login-dropdown { position: relative; }
+        .login-btn {
+            background-color: var(--primary-red); color: white; border: none;
+            padding: 0.6rem 1.2rem; border-radius: 5px; font-weight: bold;
+            cursor: pointer; transition: background 0.3s; font-size: 1rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .login-btn:hover { background-color: var(--hover-red); }
+        .login-content {
+            display: none; position: absolute; right: 0; top: 100%;
+            background-color: white; min-width: 200px; box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-radius: 8px; z-index: 101; overflow: hidden;
+        }
+        .login-content a { color: var(--text-dark); padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-weight: 500; }
+        .login-content a:hover { background-color: #F3F4F6; color: var(--secondary-blue); }
+        .login-dropdown:hover .login-content { display: block; }
+
+        .user-nav { display: none; }
+        .logout-btn { background: transparent; border: 1px solid white; color: white; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; }
+
+        /* === HERO SECTION CON IMAGEN (ARREGLADA) === */
+        .hero {
+            display: flex; align-items: center; justify-content: space-between;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white; padding: 0 5%; min-height: 80vh;
+        }
+        .hero-content { flex: 1; padding: 4rem 2rem 4rem 0; }
+        .hero-content h1 { font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1.2; }
+        .hero-content p { font-size: 1.2rem; margin-bottom: 2.5rem; max-width: 600px; color: #E5E7EB; }
+        .hero-image { flex: 1; display: flex; justify-content: flex-end; }
+        /* Arreglo de imagen: Uso de imagen generada con fallback */
+        .hero-image img {
+            width: 100%; max-width: 600px; border-radius: 20px;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.2); transform: rotate(2deg);
+            border: 5px solid white;
+        }
+
+        .btn-large {
+            background-color: var(--primary-red); color: white; padding: 1rem 2rem;
+            border-radius: 30px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; border: none; transition: transform 0.2s, background 0.3s;
+            display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .btn-large:hover { background-color: var(--hover-red); transform: translateY(-2px); }
+
+        /* === HISTORIA Y VALORES === */
+        .history-section { padding: 5rem 5%; background: white; display: flex; gap: 4rem; align-items: center; }
+        .history-text { flex: 1; }
+        .history-text h2 { color: var(--primary-blue); font-size: 2.5rem; margin-bottom: 1rem; }
+        .history-text p { margin-bottom: 1.5rem; color: #4B5563; font-size: 1.1rem; }
+        .history-img { flex: 1; }
+        .history-img img { width: 100%; border-radius: 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+
+        /* === NIVELES EDUCATIVOS === */
+        .levels { padding: 5rem 5%; text-align: center; }
+        .levels h2 { color: var(--primary-blue); margin-bottom: 3rem; font-size: 2.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 15px rgba(0,0,0,0.05); transition: transform 0.3s; text-align: left; }
+        .card:hover { transform: translateY(-10px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-bottom: 4px solid var(--primary-red); }
+        .card-body { padding: 1.5rem; }
+        .card-body h3 { color: var(--secondary-blue); margin-bottom: 0.5rem; font-size: 1.5rem; }
+        .card-body p { color: #6B7280; font-size: 0.95rem; }
+
+        /* === MODAL LOGIN MULTI-USUARIO === */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 37, 64, 0.9); display: none;
+            justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px);
+        }
+        .modal {
+            background: white; padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 450px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative;
+        }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #9CA3AF; }
+        .modal-header { text-align: center; margin-bottom: 2rem; }
+        .modal-header i { font-size: 3rem; color: var(--primary-blue); margin-bottom: 1rem; }
+        .modal-header h2 { color: var(--primary-blue); margin-bottom: 0.5rem; }
+        .modal-header p { color: #6B7280; font-size: 0.9rem; }
+
+        .login-options { display: flex; gap: 10px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+        .login-option { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-weight: bold; color: #6B7280; }
+        .login-option.active { color: var(--primary-red); border-bottom: 3px solid var(--primary-red); }
+
+        .login-form { display: none; }
+        .login-form.active { display: block; }
+
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #374151; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: var(--primary-red); }
+
+        .btn-submit { width: 100%; background: var(--primary-blue); color: white; padding: 1rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .btn-submit:hover { background: var(--secondary-blue); }
+
+        /* === DASHBOARDS (ESTILOS GENERALES) === */
+        .dashboard-view { display: none; padding: 2rem 5%; }
+        .portal-header { background: white; padding: 2rem; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .portal-header h2 { color: var(--primary-blue); font-size: 2rem; }
+        .portal-header p { color: #6B7280; }
+        .user-summary { display: flex; align-items: center; gap: 15px; text-align: right; }
+        .user-avatar { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white; }
+
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } .history-section { flex-direction: column; } .hero { flex-direction: column; text-align: center; } }
+
+        .panel { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem; border: 1px solid var(--border-color); }
+        .panel h3 { color: var(--primary-blue); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { color: #6B7280; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+
+        .badge { 
+    padding: 0.4rem 0.8rem; 
+    border-radius: 20px; 
+    font-size: 0.8rem; 
+    font-weight: bold; 
+    color: white;
+    display: inline-block; /* Mantiene el padding vertical intacto */
+    white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+    text-align: center;
+}
+        .bg-green { background: #10B981; }
+        .bg-red { background: var(--primary-red); }
+        .bg-blue { background: #3B82F6; }
+
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .action-btn { text-align: center; padding: 20px; border-radius: 8px; background: #F3F4F6; cursor: pointer; text-decoration: none; color: var(--primary-blue); font-weight: bold; transition: background 0.3s; }
+        .action-btn:hover { background: #E5E7EB; }
+        .action-btn i { font-size: 2rem; color: var(--primary-red); margin-bottom: 10px; display: block; }
+
+        /* Estilos específicos Director */
+        .director-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid var(--border-color); }
+        .stat-card h4 { font-size: 2.5rem; color: var(--primary-blue); }
+        .stat-card p { color: #6B7280; font-size: 0.9rem; }
+
+        footer { background: var(--primary-blue); color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo" onclick="showView('landing')">
+            <i class="fa-solid fa-school-flag"></i>
+            Instituto <span>Carlos Santiago</span>
+        </a>
+        <nav id="public-nav">
+            <a href="#" onclick="showView('landing')">Inicio</a>
+            <a href="#levels">Niveles</a>
+            <a href="#history">Historia</a>
+            <div class="login-dropdown">
+                <button class="login-btn"><i class="fa-solid fa-user-lock"></i> Portales <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem;"></i></button>
+                <div class="login-content">
+                    <a href="#" onclick="openModal('student')"><i class="fa-solid fa-user-graduate"></i> Alumnos</a>
+                    <a href="#" onclick="openModal('teacher')"><i class="fa-solid fa-user-tie"></i> Profesores</a>
+                    <a href="#" onclick="openModal('director')"><i class="fa-solid fa-chalkboard-user"></i> Dirección</a>
+                </div>
+            </div>
+        </nav>
+        <nav id="user-nav" class="user-nav">
+            <span id="user-display-name">Usuario</span>
+            <button onclick="logout()" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+        </nav>
+    </header>
+
+    <div id="landing-view" class="view">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Formando a los Líderes del Mañana</h1>
+                <p>Educación de excelencia con valores sólidos. Descubre por qué somos la mejor opción educativa para el desarrollo integral y éxito futuro de tus hijos.</p>
+                <button class="btn-large" onclick="openModal('student')">
+                    <i class="fa-solid fa-laptop-code"></i> Ingresar al Portal Escolar
+                </button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?q=80&w=600" alt="Estudiantes sonriendo en el campus">
+            </div>
+        </section>
+
+        <section id="history" class="history-section">
+            <div class="history-text">
+                <h2>Nuestra Historia y Valores</h2>
+                <p>Fundado en 1998, el <strong>Instituto Carlos Santiago</strong> nació con la visión de crear un espacio donde la excelencia académica y el desarrollo humano caminaran de la mano. A lo largo de más de 25 años, hemos graduado a generaciones de jóvenes líderes que hoy destacan en sus comunidades.</p>
+                <p>Nuestros pilares fundamentales son la <strong>Integridad, la Innovación y la Empatía</strong>. Creemos en una educación personalizada que no solo prepara para los exámenes, sino para los desafíos de la vida real, integrando tecnología de punta con una profunda responsabilidad social.</p>
+            </div>
+            <div class="history-img">
+                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=800" alt="Biblioteca del Instituto">
+            </div>
+        </section>
+
+        <section id="levels" class="levels">
+            <h2>Nuestra Oferta Educativa</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Kínder">
+                    <div class="card-body"><h3>Kínder</h3><p>Estimulación temprana y aprendizaje bilingüe basado en el juego.</p></div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Primaria">
+                    <div class="card-body"><h3>Primaria</h3><p>Bases sólidas en matemáticas, ciencias y arte, fomentando curiosidad.</p></div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Secundaria">
+                    <div class="card-body"><h3>Secundaria</h3><p>Pensamiento crítico e inmersión tecnológica para mentes adolescentes.</p></div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Preparatoria">
+                    <div class="card-body"><h3>Preparatoria</h3><p>Alto nivel pre-universitario, orientación vocacional y responsabilidad social.</p></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h2>Acceso Institucional</h2>
+                <p>Bienvenido a la plataforma del Instituto Carlos Santiago</p>
+            </div>
+            <div class="login-options">
+                <div id="opt-student" class="login-option" onclick="selectForm('student')"><i class="fa-solid fa-user-graduate"></i> Alumno</div>
+                <div id="opt-teacher" class="login-option" onclick="selectForm('teacher')"><i class="fa-solid fa-user-tie"></i> Profesor</div>
+                <div id="opt-director" class="login-option" onclick="selectForm('director')"><i class="fa-solid fa-chalkboard-user"></i> Director</div>
+            </div>
+            
+            <form id="form-student" class="login-form" onsubmit="handleLogin(event, 'student', 'Alejandro Martínez')">
+                <div class="form-group"><label>Matrícula / Correo Institucional</label><input type="text" placeholder="AL10293"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" placeholder="••••••••"></div>
+                <button type="submit" class="btn-submit">Ingresar como Alumno</button>
+            </form>
+            <form id="form-teacher" class="login-form" onsubmit="handleLogin(event, 'teacher', 'Dr. Roberto Méndez')">
+                <div class="form-group"><label>Número de Empleado / Correo</label><input type="text" placeholder="PR2001"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" placeholder="••••••••"></div>
+                <button type="submit" class="btn-submit">Ingresar como Profesor</button>
+            </form>
+            <form id="form-director" class="login-form" onsubmit="handleLogin(event, 'director', 'Dra. Carmen Salazar')">
+                <div class="form-group"><label>Número de Director / Correo</label><input type="text" placeholder="DIR100"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" placeholder="••••••••"></div>
+                <button type="submit" class="btn-submit">Ingresar como Director</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="student-view" class="view dashboard-view">
+        <div class="portal-header">
+            <div>
+                <h2>Panel Estudiantil</h2>
+                <p>Preparatoria - 4to Semestre - Grupo A</p>
+            </div>
+            <div class="user-summary">
+                <div><strong>Alejandro Martínez</strong><br><span style="font-size: 0.8rem; color: #6B7280;">Matrícula: AL10293</span></div>
+                <div class="user-avatar" style="background: var(--primary-red);">AM</div>
+            </div>
+        </div>
+        <div class="dashboard-grid">
+            <div class="col-main">
+                <div class="panel">
+                    <h3><i class="fa-regular fa-calendar-days"></i> Mi Horario de Hoy</h3>
+                    <table><tr><th>Hora</th><th>Materia</th><th>Aula</th></tr><tr><td>07:00 - 08:30</td><td>Cálculo Diferencial</td><td>A-102</td></tr><tr><td>08:30 - 10:00</td><td>Física II</td><td>Lab-03</td></tr></table>
+                </div>
+                <div class="panel">
+                    <h3><i class="fa-solid fa-chart-line"></i> Calificaciones Recientes</h3>
+                    <table><tr><th>Materia</th><th>Parcial 1</th><th>Parcial 2</th><th>Estatus</th></tr><tr><td>Cálculo Diferencial</td><td>9.5</td><td>-</td><td><span class="badge bg-green">Regular</span></td></tr></table>
+                </div>
+            </div>
+            <div class="col-side">
+                <div class="panel">
+                    <h3><i class="fa-solid fa-file-invoice-dollar"></i> Estado de Pagos</h3>
+                    <ul style="list-style: none;"><li style="margin-bottom: 10px; display: flex; justify-content: space-between;">Febrero: <span class="badge bg-red">Pendiente</span></li></ul>
+                    <button class="btn-submit" style="background-color: var(--secondary-blue); margin-top: 1rem;"><i class="fa-brands fa-cc-visa"></i> Pagar Ahora</button>
+                </div>
+                <div class="panel">
+                    <h3><i class="fa-solid fa-quick-action"></i> Acciones</h3>
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn"><i class="fa-solid fa-clipboard-list"></i> Tareas</a>
+                        <a href="#" class="action-btn"><i class="fa-solid fa-folder-open"></i> Materiales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="teacher-view" class="view dashboard-view">
+        <div class="portal-header">
+            <div>
+                <h2>Panel Docente</h2>
+                <p>Matemáticas y Ciencias - Academia de Preparatoria</p>
+            </div>
+            <div class="user-summary">
+                <div><strong>Dr. Roberto Méndez</strong><br><span style="font-size: 0.8rem; color: #6B7280;">Empleado: PR2001</span></div>
+                <div class="user-avatar" style="background: var(--primary-blue);">RM</div>
+            </div>
+        </div>
+        <div class="dashboard-grid">
+            <div class="col-main">
+                <div class="panel">
+                    <h3><i class="fa-solid fa-users"></i> Mis Grupos</h3>
+                    <table>
+                        <tr><th>Nivel</th><th>Grupo</th><th>Materia</th><th>Alumnos</th><th>Acción</th></tr>
+                        <tr><td>Preparatoria 4to Sem</td><td>A</td><td>Cálculo</td><td>35</td><td><button class="badge bg-blue">Seguimiento</button></td></tr>
+                        <tr><td>Preparatoria 4to Sem</td><td>B</td><td>Física</td><td>32</td><td><button class="badge bg-blue">Seguimiento</button></td></tr>
+                        <tr><td>Preparatoria 6to Sem</td><td>A</td><td>Estadística</td><td>28</td><td><button class="badge bg-blue">Seguimiento</button></td></tr>
+                    </table>
+                </div>
+                <div class="panel">
+                    <h3><i class="fa-solid fa-clipboard-list"></i> Tareas por Calificar</h3>
+                    <table><tr><th>Fecha</th><th>Grupo</th><th>Tarea</th><th>Materia</th><th>Estatus</th></tr><tr><td>15/Feb</td><td>4°Sem-A</td><td>Ejercicios Derivadas</td><td>Cálculo</td><td><span class="badge bg-red">5 Pendientes</span></td></tr></table>
+                </div>
+            </div>
+            <div class="col-side">
+                <div class="panel">
+                    <h3><i class="fa-solid fa-quick-action"></i> Acciones Rápidas</h3>
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn"><i class="fa-solid fa-user-check"></i> Pasar Lista</a>
+                        <a href="#" class="action-btn"><i class="fa-solid fa-plus-circle"></i> Nueva Tarea</a>
+                        <a href="#" class="action-btn"><i class="fa-solid fa-file-export"></i> Reportes</a>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fa-solid fa-bullhorn"></i> Avisos Academia</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem;">Junta de academia: 18 de Febrero, 16:00, Sala A</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="director-view" class="view dashboard-view">
+        <div class="portal-header">
+            <div>
+                <h2>Panel de Dirección Global</h2>
+                <p>Administración Integral del Instituto</p>
+            </div>
+            <div class="user-summary">
+                <div><strong>Dra. Carmen Salazar</strong><br><span style="font-size: 0.8rem; color: #6B7280;">Director: DIR100</span></div>
+                <div class="user-avatar" style="background: #10B981;">CS</div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h3><i class="fa-solid fa-chart-pie"></i> Estadísticas Generales</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <div class="stat-card"><h4>380</h4><p>Alumnos Inscritos</p></div>
+                <div class="stat-card"><h4>42</h4><p>Profesores Activos</p></div>
+                <div class="stat-card"><h4>94%</h4><p>Eficiencia Terminal</p></div>
+            </div>
+        </div>
+
+        <div class="director-grid" style="display: grid;">
+            <div class="panel">
+                <h3><i class="fa-solid fa-users"></i> Gestión de Alumnos</h3>
+                <input type="text" placeholder="Buscar alumno..." style="width: 100%; padding: 10px; margin-bottom: 1rem; border-radius: 5px; border: 1px solid var(--border-color);">
+                <table>
+                    <tr><th>Matrícula</th><th>Nombre</th><th>Nivel</th><th>Grupo</th><th>Estatus</th></tr>
+                    <tr><td>AL10293</td><td>Martínez Alejandro</td><td>Preparatoria</td><td>4°Sem-A</td><td><span class="badge bg-green">Inscrito</span></td></tr>
+                    <tr><td>AL10294</td><td>Ríos Sofía</td><td>Primaria</td><td>6°A</td><td><span class="badge bg-green">Inscrito</span></td></tr>
+                    <tr><td>AL10295</td><td>Jiménez David</td><td>Secundaria</td><td>1°B</td><td><span class="badge bg-red">Baja Temporal</span></td></tr>
+                </table>
+                <button class="btn-submit">Ver Todos los Alumnos</button>
+            </div>
+            <div class="panel">
+                <h3><i class="fa-solid fa-chalkboard-user"></i> Planta Docente</h3>
+                <table>
+                    <tr><th>ID</th><th>Nombre</th><th>Academia</th><th>Carga</th></tr>
+                    <tr><td>PR2001</td><td>Méndez Roberto</td><td>Matemáticas/Preparatoria</td><td>3 Grupos</td></tr>
+                    <tr><td>PR2002</td><td>Ruiz Elena</td><td>Ciencias/Secundaria</td><td>4 Grupos</td></tr>
+                    <tr><td>PR2003</td><td>Pérez Luis</td><td>Arte/Primaria</td><td>6 Grupos</td></tr>
+                </table>
+                <button class="btn-submit">Ver Todos los Profesores</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Instituto Carlos Santiago. Plataforma Integral Demo V2. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Gestión de Vistas
+        function showView(viewId) {
+            // Ocultar todas las vistas y modales
+            document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+            closeModal();
+            
+            if (viewId === 'landing') {
+                document.getElementById('landing-view').style.display = 'block';
+                document.getElementById('public-nav').style.display = 'flex';
+                document.getElementById('user-nav').style.display = 'none';
+            } else {
+                document.getElementById(viewId + '-view').style.display = 'block';
+            }
+        }
+
+        // Gestión del Modal de Login Multi-Usuario
+        const modal = document.getElementById('login-modal');
+        function openModal(defaultType) {
+            modal.style.display = 'flex';
+            selectForm(defaultType);
+        }
+        function closeModal() { modal.style.display = 'none'; }
+        
+        function selectForm(type) {
+            // Activar opción de cabecera
+            document.querySelectorAll('.login-option').forEach(opt => opt.classList.remove('active'));
+            document.getElementById('opt-' + type).classList.add('active');
+            
+            // Mostrar formulario correspondiente
+            document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
+            document.getElementById('form-' + type).classList.add('active');
+        }
+
+        // Manejo de Login y Logout (CORREGIDO Y AMPLIADO)
+        function handleLogin(event, role, name) {
+            event.preventDefault(); // Evita recarga de página
+
+            // 1. Mostrar la vista correspondiente (student, teacher, director)
+            showView(role);
+            
+            // 2. Configurar la barra de navegación del usuario
+            document.getElementById('public-nav').style.display = 'none';
+            document.getElementById('user-nav').style.display = 'flex';
+            document.getElementById('user-display-name').innerHTML = `<strong>${name}</strong> (${role.charAt(0).toUpperCase() + role.slice(1)})`;
+            
+            // 3. Scroll suave hacia arriba
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() { showView('landing'); }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) { if (event.target == modal) { closeModal(); } }
+        
+        // Inicializar vista
+        showView('landing');
+    </script>
+</body>
+</html>

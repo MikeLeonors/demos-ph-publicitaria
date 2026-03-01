@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraNova Bienes Raíces | Plataforma Completa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === VARIABLES Y RESET === */
+        :root {
+            --primary-dark: #1E293B; /* Slate 800 */
+            --primary-gold: #D97706; /* Amber 600 */
+            --bg-light: #F8FAFC;
+            --text-main: #334155;
+            --border-color: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); }
+        .view { display: none; } /* Oculta todas las vistas por defecto */
+        .view.active { display: block; }
+
+        /* === NAVBAR === */
+        header {
+            background-color: white; padding: 0 5%; height: 80px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo i { color: var(--primary-gold); font-size: 1.8rem; }
+        
+        nav { display: flex; gap: 20px; align-items: center; }
+        nav a { text-decoration: none; color: var(--text-main); font-weight: 600; transition: color 0.3s; cursor: pointer; }
+        nav a:hover { color: var(--primary-gold); }
+        
+        .btn-outline { border: 2px solid var(--primary-dark); padding: 8px 20px; border-radius: 5px; color: var(--primary-dark); font-weight: bold; background: transparent; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .btn-outline:hover { background: var(--primary-dark); color: white; }
+        .btn-solid { background: var(--primary-gold); color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; text-align: center; display: inline-block; text-decoration: none;}
+        .btn-solid:hover { background: #B45309; }
+
+        /* === HERO === */
+        .hero {
+            height: 70vh; min-height: 500px;
+            background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000') center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 0 5%;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+        
+        .search-box { background: white; padding: 10px; border-radius: 50px; display: flex; width: 100%; max-width: 800px; margin-top: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .search-box select, .search-box input { border: none; padding: 15px 20px; font-size: 1rem; outline: none; background: transparent; border-right: 1px solid var(--border-color); }
+        .search-box input { flex: 1; border-right: none; }
+        .btn-search { background: var(--primary-gold); color: white; border: none; padding: 0 30px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+
+        /* === TARJETAS DE PROPIEDADES === */
+        .properties-section { padding: 5rem 5%; }
+        .section-title { font-size: 2rem; color: var(--primary-dark); margin-bottom: 2rem; border-left: 5px solid var(--primary-gold); padding-left: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: white; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); transition: transform 0.3s; cursor: pointer; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .card-img { height: 220px; width: 100%; object-fit: cover; position: relative; }
+        .badge-status { position: absolute; top: 15px; left: 15px; background: var(--primary-dark); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .card-body { padding: 1.5rem; }
+        .price { font-size: 1.5rem; color: var(--primary-gold); font-weight: bold; margin-bottom: 5px; }
+        .details-icons { display: flex; gap: 15px; color: #64748B; font-size: 0.9rem; margin: 15px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 10px 0; }
+        .btn-block { display: block; width: 100%; text-align: center; background: var(--bg-light); color: var(--primary-dark); padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; border: 1px solid var(--border-color); transition: 0.3s; }
+        .btn-block:hover { background: var(--primary-dark); color: white; }
+
+        /* === VISTA: CATÁLOGO (COMPRAR/RENTAR) === */
+        .catalog-layout { display: grid; grid-template-columns: 250px 1fr; gap: 2rem; padding: 3rem 5%; }
+        .filters { background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color); height: fit-content; }
+        .filters h3 { margin-bottom: 1rem; color: var(--primary-dark); }
+        .filter-group { margin-bottom: 1.5rem; }
+        .filter-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; font-weight: bold; }
+        .filter-group select, .filter-group input { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 5px; }
+
+        /* === VISTA: DETALLES DE PROPIEDAD === */
+        .details-header { padding: 3rem 5% 1rem 5%; }
+        .details-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; padding: 0 5% 3rem 5%; }
+        .main-image { width: 100%; height: 500px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem; }
+        .thumbnail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 2rem; }
+        .thumbnail-grid img { width: 100%; height: 100px; object-fit: cover; border-radius: 5px; cursor: pointer; transition: opacity 0.3s; }
+        .thumbnail-grid img:hover { opacity: 0.7; }
+        .property-info h2 { font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 1rem; }
+        .contact-card { background: white; padding: 2rem; border-radius: 10px; border: 1px solid var(--border-color); position: sticky; top: 100px; }
+        .agent-info { display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .agent-info img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+
+        /* === VISTA: VENDER === */
+        .sell-hero { background: var(--primary-dark); color: white; padding: 4rem 5%; text-align: center; }
+        .sell-container { max-width: 800px; margin: -50px auto 3rem auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .form-control { display: flex; flex-direction: column; gap: 5px; }
+        .form-control input, .form-control select { padding: 12px; border: 1px solid var(--border-color); border-radius: 5px; }
+
+        /* === VISTA: PORTAL DEL COMPRADOR (PANEL) === */
+        .portal-layout { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; }
+        .process-tracker { background: white; padding: 3rem 2rem; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .timeline { display: flex; justify-content: space-between; position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; top: 20px; left: 0; right: 0; height: 4px; background: var(--border-color); z-index: 1; }
+        .step { position: relative; z-index: 2; text-align: center; width: 25%; }
+        .step .icon { width: 44px; height: 44px; border-radius: 50%; background: white; border: 4px solid var(--border-color); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #94A3B8; }
+        .step.completed .icon { border-color: #10B981; background: #10B981; color: white; }
+        .step.active .icon { border-color: var(--primary-gold); color: var(--primary-gold); }
+        .step p { font-weight: bold; font-size: 0.9rem; }
+        .dashboard-cols { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        .panel { background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .status-badge { padding: 4px 10px; border-radius: 15px; font-size: 0.75rem; font-weight: bold; color: white; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 2.5rem; border-radius: 10px; width: 90%; max-width: 400px; text-align: center; }
+        
+        @media(max-width: 800px) { 
+            .catalog-layout, .details-grid, .dashboard-cols, .form-grid { grid-template-columns: 1fr; }
+            .search-box { flex-direction: column; border-radius: 10px; }
+            .search-box select, .search-box input, .btn-search { border-right: none; border-bottom: 1px solid var(--border-color); border-radius: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="navigateTo('landing')">
+            <i class="fa-solid fa-building-shield"></i> TerraNova
+        </div>
+        <nav id="nav-public">
+            <a onclick="openCatalog('Comprar')">Comprar</a>
+            <a onclick="openCatalog('Rentar')">Rentar</a>
+            <a onclick="navigateTo('sell')">Vender</a>
+            <button class="btn-outline" onclick="document.getElementById('login-modal').style.display='flex'">
+                <i class="fa-regular fa-user"></i> Mi Cuenta
+            </button>
+        </nav>
+        <nav id="nav-portal" style="display: none;">
+            <a onclick="openCatalog('Comprar')">Comprar</a>
+            <a onclick="openCatalog('Rentar')">Rentar</a>
+            <span style="font-weight: 600; cursor: pointer;" onclick="navigateTo('portal')">
+                Hola, <span style="color: var(--primary-gold); text-decoration: underline;">Familia Gómez</span>
+            </span>
+            <button class="btn-outline" onclick="logout()">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <div id="landing-view" class="view active">
+        <section class="hero">
+            <h1>Encuentra el hogar de tus sueños</h1>
+            <p style="font-size: 1.2rem;">Más de 5,000 propiedades verificadas y asesoría legal en cada paso.</p>
+            <div class="search-box">
+                <select id="hero-type"><option value="Comprar">Comprar</option><option value="Rentar">Rentar</option></select>
+                <select><option>Casa</option><option>Departamento</option><option>Terreno</option></select>
+                <input type="text" placeholder="Ej. Polanco, Roma Norte, Coyoacán...">
+                <button class="btn-search" onclick="openCatalog(document.getElementById('hero-type').value)"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+            </div>
+        </section>
+
+        <section class="properties-section">
+            <h2 class="section-title">Propiedades Destacadas</h2>
+            <div class="grid" id="featured-grid">
+                </div>
+        </section>
+    </div>
+
+    <div id="catalog-view" class="view">
+        <div style="background: var(--primary-dark); padding: 2rem 5%; color: white;">
+            <h1 id="catalog-title">Propiedades en Venta</h1>
+            <p>Mostrando 124 resultados disponibles</p>
+        </div>
+        <div class="catalog-layout">
+            <aside class="filters">
+                <h3>Filtros de Búsqueda</h3>
+                <div class="filter-group"><label>Ubicación</label><input type="text" placeholder="Ciudad o Colonia"></div>
+                <div class="filter-group"><label>Tipo de Inmueble</label><select><option>Todos</option><option>Casas</option><option>Departamentos</option></select></div>
+                <div class="filter-group"><label>Precio Máximo</label><select><option>Sin límite</option><option>Hasta $3 MDP</option><option>Hasta $5 MDP</option></select></div>
+                <button class="btn-solid" style="background: var(--primary-dark);">Aplicar Filtros</button>
+            </aside>
+            <div>
+                <div class="grid" id="catalog-grid">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="details-view" class="view">
+        <div class="details-header">
+            <button onclick="navigateTo('catalog')" class="btn-outline" style="border: none; padding: 0; margin-bottom: 1rem;"><i class="fa-solid fa-arrow-left"></i> Volver a resultados</button>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h1 style="color: var(--primary-dark); font-size: 2.5rem;">Residencial Los Cerezos</h1>
+                    <p style="color: #64748B; font-size: 1.1rem;"><i class="fa-solid fa-location-dot"></i> Zapopan, Jalisco, C.P. 45130</p>
+                </div>
+                <div style="text-align: right;">
+                    <span style="background: var(--primary-dark); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">En Venta</span>
+                    <h2 style="color: var(--primary-gold); font-size: 2.5rem; margin-top: 5px;">$4,250,000 MXN</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="details-grid">
+            <div class="property-media">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000" class="main-image" alt="Casa principal">
+                <div class="thumbnail-grid">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=300" alt="Interior">
+                    <img src="https://images.unsplash.com/photo-1600566753086-00f18efc2294?q=80&w=300" alt="Cocina">
+                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=300" alt="Baño">
+                    <img src="https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=300" alt="Jardín">
+                </div>
+                
+                <div class="property-info">
+                    <h2>Características Principales</h2>
+                    <div class="details-icons" style="font-size: 1.1rem; justify-content: flex-start; gap: 30px; margin-bottom: 2rem;">
+                        <span><i class="fa-solid fa-bed"></i> 3 Habitaciones</span>
+                        <span><i class="fa-solid fa-bath"></i> 2.5 Baños</span>
+                        <span><i class="fa-solid fa-car"></i> 2 Estacionamientos</span>
+                        <span><i class="fa-solid fa-ruler-combined"></i> 180 m² Const.</span>
+                    </div>
+
+                    <h2>Descripción</h2>
+                    <p style="line-height: 1.8; color: #475569; margin-bottom: 2rem;">
+                        Hermosa residencia de diseño contemporáneo ubicada en uno de los fraccionamientos más exclusivos y seguros de la zona. 
+                        En planta baja cuenta con sala a doble altura, comedor con vista al jardín, cocina integral equipada con cubierta de granito 
+                        y estudio. La planta alta ofrece recámara principal con vestidor y baño completo, además de dos recámaras secundarias y un espectacular *roof garden* con asador.
+                    </p>
+
+                    <h2>Ubicación Aproximada</h2>
+                    <div style="background: #E2E8F0; height: 300px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #64748B;">
+                        <i class="fa-solid fa-map-location-dot" style="font-size: 3rem; margin-right: 15px;"></i> Mapa Interactivo
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="contact-card">
+                    <div class="agent-info">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150" alt="Asesora">
+                        <div>
+                            <h3 style="color: var(--primary-dark); font-size: 1.1rem;">Daniela Vargas</h3>
+                            <p style="color: #64748B; font-size: 0.9rem;">Asesora Certificada AMPI</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-bottom: 15px; color: var(--primary-dark);">Me interesa esta propiedad</h3>
+                    <form onsubmit="alert('Mensaje enviado. Un asesor te contactará pronto.'); return false;">
+                        <input type="text" placeholder="Tu Nombre" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px;" required>
+                        <input type="email" placeholder="Correo electrónico" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px;" required>
+                        <input type="tel" placeholder="Teléfono" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px;">
+                        <textarea placeholder="Hola, me gustaría agendar una visita a Residencial Los Cerezos..." rows="4" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px; resize: none;"></textarea>
+                        <button type="submit" class="btn-solid"><i class="fa-regular fa-paper-plane"></i> Enviar Mensaje</button>
+                        <button type="button" class="btn-outline" style="width: 100%; margin-top: 10px; border-color: #25D366; color: #25D366;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Directo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sell-view" class="view">
+        <div class="sell-hero">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Vende o Renta tu Inmueble Rápido y Seguro</h1>
+            <p style="font-size: 1.2rem; color: #CBD5E1;">Evaluación profesional gratuita y promoción en las mejores plataformas del país.</p>
+        </div>
+        <div class="sell-container">
+            <h2 style="color: var(--primary-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px;">Datos de tu Propiedad</h2>
+            <form onsubmit="alert('Datos recibidos. Te contactaremos en menos de 24 horas.'); navigateTo('landing'); return false;">
+                <div class="form-grid">
+                    <div class="form-control"><label>Operación deseada</label><select><option>Quiero Vender</option><option>Quiero Rentar</option></select></div>
+                    <div class="form-control"><label>Tipo de Inmueble</label><select><option>Casa</option><option>Departamento</option><option>Terreno / Lote</option><option>Comercial</option></select></div>
+                    <div class="form-control" style="grid-column: span 2;"><label>Dirección exacta o Colonia</label><input type="text" placeholder="Ej. Lomas de Chapultepec, CDMX" required></div>
+                </div>
+                
+                <h2 style="color: var(--primary-dark); margin-bottom: 1.5rem; margin-top: 2rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px;">Tus Datos de Contacto</h2>
+                <div class="form-grid">
+                    <div class="form-control"><label>Nombre Completo</label><input type="text" placeholder="Tu nombre" required></div>
+                    <div class="form-control"><label>Teléfono Celular</label><input type="tel" placeholder="10 dígitos" required></div>
+                    <div class="form-control" style="grid-column: span 2;"><label>Correo Electrónico</label><input type="email" placeholder="correo@ejemplo.com" required></div>
+                </div>
+                
+                <button type="submit" class="btn-solid" style="font-size: 1.1rem; padding: 15px;"><i class="fa-solid fa-house-circle-check"></i> Solicitar Valuación Gratuita</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="portal-view" class="view portal-layout">
+        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h2 style="font-size: 2rem; color: var(--primary-dark);">Mi Panel Inmobiliario</h2>
+                <p style="color: #64748B;">Sigue de cerca el proceso de tu nueva propiedad.</p>
+            </div>
+        </div>
+
+        <div class="process-tracker">
+            <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary-dark);">Progreso de Compra: <span style="color: var(--primary-gold); cursor: pointer; text-decoration: underline;" onclick="navigateTo('details')">Loft Torre Central</span></h3>
+            <div class="timeline">
+                <div class="step completed"><div class="icon"><i class="fa-solid fa-check"></i></div><p>Oferta Aceptada</p></div>
+                <div class="step completed"><div class="icon"><i class="fa-solid fa-check"></i></div><p>Firma Contrato</p></div>
+                <div class="step active"><div class="icon"><i class="fa-solid fa-building-columns"></i></div><p>Aprobación Crédito</p></div>
+                <div class="step"><div class="icon"><i class="fa-solid fa-file-signature"></i></div><p>Escrituración</p></div>
+            </div>
+        </div>
+
+        <div class="dashboard-cols">
+            <div class="panel">
+                <h3><i class="fa-solid fa-folder-open"></i> Expediente Digital</h3>
+                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color);">
+                    <div><i class="fa-solid fa-id-card" style="color: #94A3B8; margin-right: 10px;"></i> INE</div><span class="status-badge" style="background: #10B981;">Aprobado</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color);">
+                    <div><i class="fa-solid fa-file-invoice" style="color: #94A3B8; margin-right: 10px;"></i> Comprobante Domicilio</div><span class="status-badge" style="background: #10B981;">Aprobado</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 12px 0; align-items: center;">
+                    <div><i class="fa-solid fa-file-invoice-dollar" style="color: var(--primary-gold); margin-right: 10px;"></i> Recibos de Nómina</div>
+                    <button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;"><i class="fa-solid fa-upload"></i> Subir PDF</button>
+                </div>
+            </div>
+            <div class="panel">
+                <h3><i class="fa-regular fa-calendar-check"></i> Próxima Cita</h3>
+                <div style="background: var(--bg-light); padding: 15px; border-left: 4px solid var(--primary-gold); border-radius: 4px;">
+                    <strong style="display: block; color: var(--primary-dark);">Firma en Notaría #42</strong>
+                    <span style="font-size: 0.9rem; color: #64748B;"><i class="fa-regular fa-clock"></i> Jueves, 05 Mar - 10:00 AM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span style="float: right; cursor: pointer; font-size: 1.5rem; color: #94A3B8;" onclick="document.getElementById('login-modal').style.display='none'">&times;</span>
+            <i class="fa-solid fa-user-circle" style="font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px;"></i>
+            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">Acceso a Clientes</h2>
+            <form onsubmit="handleLogin(event)">
+                <input type="email" placeholder="Correo (Cualquiera funciona)" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px;" required>
+                <input type="password" placeholder="Contraseña" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 5px;" required>
+                <button type="submit" class="btn-solid">Ingresar al Portal</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Datos simulados para reciclar tarjetas de propiedades
+        const propiedades = [
+            { id: 1, img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600', badge: 'En Venta', bg: 'var(--primary-dark)', precio: '$4,250,000 MXN', titulo: 'Residencial Los Cerezos', ubicacion: 'Zapopan, Jalisco', hab: 3, ban: 2.5, m2: 180 },
+            { id: 2, img: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=600', badge: 'En Renta', bg: 'var(--primary-gold)', precio: '$22,000 MXN / mes', titulo: 'Loft Torre Central', ubicacion: 'Colonia Roma, CDMX', hab: 2, ban: 2, m2: 95 },
+            { id: 3, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600', badge: 'Preventa', bg: '#10B981', precio: '$6,100,000 MXN', titulo: 'Villa del Lago', ubicacion: 'Valle de Bravo, Edomex', hab: 4, ban: 4, m2: 320 }
+        ];
+
+        // Función para renderizar tarjetas en un contenedor específico
+        function renderCards(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            propiedades.forEach(prop => {
+                container.innerHTML += `
+                    <div class="card" onclick="navigateTo('details')">
+                        <div class="card-img">
+                            <img src="${prop.img}" style="width:100%; height:100%; object-fit:cover;" alt="Propiedad">
+                            <span class="badge-status" style="background: ${prop.bg};">${prop.badge}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="price">${prop.precio}</div>
+                            <h3 style="font-size: 1.1rem; color: var(--primary-dark);">${prop.titulo}</h3>
+                            <p style="color: #64748B; font-size: 0.9rem;"><i class="fa-solid fa-location-dot"></i> ${prop.ubicacion}</p>
+                            <div class="details-icons">
+                                <span><i class="fa-solid fa-bed"></i> ${prop.hab}</span>
+                                <span><i class="fa-solid fa-bath"></i> ${prop.ban}</span>
+                                <span><i class="fa-solid fa-ruler-combined"></i> ${prop.m2}m²</span>
+                            </div>
+                            <button class="btn-block">Ver Detalles</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // Inicializar tarjetas al cargar
+        renderCards('featured-grid');
+        renderCards('catalog-grid');
+
+        // Función Principal de Navegación SPA
+        function navigateTo(viewId) {
+            // Ocultar todas las vistas
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            // Mostrar la vista solicitada
+            document.getElementById(viewId + '-view').classList.add('active');
+            // Hacer scroll hasta arriba suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Función especial para abrir el catálogo cambiando el título
+        function openCatalog(tipo) {
+            document.getElementById('catalog-title').innerText = `Propiedades en ${tipo}`;
+            navigateTo('catalog');
+        }
+
+        // Manejo de Login
+        function handleLogin(e) {
+            e.preventDefault();
+            document.getElementById('login-modal').style.display = 'none';
+            
+            // Cambiar navbar a modo "Logueado"
+            document.getElementById('nav-public').style.display = 'none';
+            document.getElementById('nav-portal').style.display = 'flex';
+            
+            // Ir al portal
+            navigateTo('portal');
+        }
+
+        // Manejo de Logout
+        function logout() {
+            // Regresar navbar a modo "Público"
+            document.getElementById('nav-portal').style.display = 'none';
+            document.getElementById('nav-public').style.display = 'flex';
+            
+            // Ir al inicio
+            navigateTo('landing');
+        }
+    </script>
+</body>
+</html>

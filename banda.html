@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOISE SYNDICATE | SYSTEM OVERLOAD | RIOT TRANSMISSION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === VARIABLES & RIOT RESET === */
+        :root {
+            --bg-dark: #000000;
+            --bg-dirty: #0a0a0a;
+            --neon-pink: #ff0055;
+            --neon-cyan: #00ffff;
+            --white: #ffffff;
+            --dirty-white: #d1d5db;
+        }
+
+        /* Tipografías sugeridas: Distressed para títulos, Monospace para cuerpo */
+        * { margin: 0; padding: 0; box-sizing: border-box; text-transform: uppercase; font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
+        
+        /* Grano de película de fondo para ensuciar todo */
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--dirty-white); 
+            overflow-x: hidden;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4EEoAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABhWlDQ1BJQ0MgUHJvZmlsZQAAeJydks8rRUEYx8e5VpSFlb8lKUtZKMK3orRQlCVf9xXfMhXfR9lRshHfxHdfZWfJz9pZiLKyYCHKRllYWfK99XWfM7M7N1GvU8/MmZln3rNPDbV1Zp5mQxHh7ZfMh3b2Pfv9r/MAnqF40EwU9l/N/9B8EAGW03zM/FvXWqYfVfphR5fN408w6/f2W1nF5F4gM6N5P5z22f/94v6A2X+gI8fKvzXGOfL/Oa5Vv0v955pPtfWv7Fv2tWOfI/Z7bB5/p94/p855l1Xz4fF38wP8n9X5X5qLwQf8mfr5h/8fU2I+uU/8wY+onY4onLgT8XmI2umYx4n4PETtfMRR6/hHHTmP+D35uY/Y6YjCibuI4vE6H53T8byI4u8w+qbjHTp+H/v9F4jXy6b539O+57/r2D+55wH0XvO59//Y+e//4gB15t3L9P+Bqf4ZfwBofL3L7bY83m77R4u7m45/58/uYjO9r5vP7S6X29w/bntD72bBfF6u59NlWv7Z789W/m66XOf2BvX34P/19vX6v6b88L+36X8AOfn5f4D8eXkAAAAEZ0FNQQAAsY58+1GTAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRFBAQEAgICAwMD49xVCAAAAB10Uk5TAAAAAAAAAAABAgMEBQYHCAkKCwwNDg8QERITFBUWGwH3m08AAAD7SURBVDjLYwCBjMws5vD9pUIM4f5N4vTDrbXCDAxsXfI9L+eJMzCwNsrTDrb5wW5I6pDneD5LnIGBrV6KdvX086XCDAxsnWpB/VNPXwP5WfN5vTzX50kzMLDZK+L6l0499QbkZ/V2tU4/WSTFwMDmXynfM/X00b1A7t5N4vTjTXG8Cxl0N57eYpS7e+XU0w09wAEMXatv89X77Ew5vAzkbyzR1Nf8xZ7wN7T6pZ6+mrlw6uF4CcaGlUeO8tcfeMiv996Vun9m6u4uKQYGBuO+G7w1+6YvHHw4b8fK5v45u7fKszCwmfbe4KzZPWfG4sNDe3Zf7Gjfd3eH5D64h6W7567u5N7H10C6p+mX7uS+28sh7u3X5r7eS996uUuCgYFB+8jFr4vH9596v7u/Zdfv5r7er7fIs5n169p5+Ym9969B696mu3nv/X65q5FBD3+D+9v/O9X+vH9v5e7Xzd8vfv3fP77XwN5A4/6mX4t9Nf16b7w6XW58uXGfAAMAdpP/bV88t/AAAAAASUVORK5CYII=');
+        }
+
+        .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .view.active { display: block; opacity: 1; }
+
+        /* === TÍTULOS AGRESIVOS === */
+        .glitch-title { 
+            position: relative; 
+            font-size: 6rem; /* Gigante */
+            font-weight: 900; 
+            letter-spacing: -3px; /* Apretado */
+            color: var(--white); 
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+            text-shadow: 3px 3px 0 var(--neon-pink), -3px -3px 0 var(--neon-cyan);
+        }
+        
+        .section-header {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--white);
+            background-color: var(--bg-dark); /* Fondo para resaltar */
+            display: inline-block;
+            padding: 10px 30px;
+            transform: skew(-10deg) rotate(-3deg);
+            box-shadow: 10px 10px 0 var(--neon-pink);
+        }
+
+        /* === NAVEGACIÓN RIOT === */
+        header { 
+            background: rgba(0, 0, 0, 0.95); padding: 0 5%; height: 90px; display: flex; 
+            justify-content: space-between; align-items: center; position: sticky; 
+            top: 0; z-index: 1000; border-bottom: 4px solid var(--neon-cyan);
+            box-shadow: 0 5px 15px rgba(0,255,255,0.2);
+        }
+        .logo { font-size: 2rem; font-weight: 900; color: var(--white); text-decoration: none; letter-spacing: -2px; cursor: pointer; }
+        .logo span { color: var(--neon-pink); }
+        
+        nav { display: flex; gap: 30px; align-items: center; }
+        nav a { text-decoration: none; color: var(--white); font-weight: 800; cursor: pointer; }
+        nav a:hover { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+        
+        /* Botón estilo "Parche de Chaleco" (Corte irregular) */
+        .btn-riot { 
+            background: transparent; color: var(--neon-pink); border: 2px solid var(--neon-pink); 
+            padding: 12px 24px; font-weight: 900; cursor: pointer; transition: 0.2s; 
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); /* Asimétrico */
+        }
+        .btn-riot:hover { 
+            background: var(--neon-pink); color: var(--bg-dark); 
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* === SECCIONES LANDING === */
+        section { padding: 8rem 5%; }
+        
+        /* Hero: Foto Gigante de Fondo */
+        .hero { 
+            height: 90vh; display: flex; flex-direction: column; justify-content: flex-end; 
+            align-items: flex-start; text-align: left; 
+            background: linear-gradient(0deg, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 60%), 
+                        url('https://images.unsplash.com/photo-1598387993441-a364f854c3e1?q=80&w=2000') center/cover;
+            padding-bottom: 5rem;
+        }
+
+        /* Tour: Lista con Foto de fondo */
+        .tour { background-color: var(--bg-dirty); }
+        .tour-list { max-width: 900px; margin: 0 auto; }
+        .tour-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 20px; border-bottom: 1px dashed #333; margin-bottom: 15px;
+            background: rgba(0,0,0,0.7); border-radius: 5px;
+        }
+        .tour-item:hover { border-color: var(--neon-cyan); padding-left: 30px; background: rgba(0,255,255,0.05); }
+        .tour-date { font-size: 2.5rem; font-weight: 900; color: var(--neon-cyan); }
+        .tour-city { flex: 1; margin: 0 30px; }
+
+        /* MERCH: Grid */
+        .merch { background: #080808; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .merch-card { 
+            background: var(--bg-dark); border: 1px solid #222; padding: 20px; text-align: left;
+            position: relative; overflow: hidden;
+        }
+        .merch-card:hover { border-color: var(--neon-pink); transform: rotate(1deg); }
+        .merch-img { width: 100%; height: 300px; object-fit: cover; filter: grayscale(1); margin-bottom: 15px; }
+        .merch-card:hover .merch-img { filter: grayscale(0); }
+
+        /* === COLLAGE SECCIÓN: THE SYNDICATE (FOTOS) === */
+        .syndicate-collage { 
+            padding: 10rem 5%; 
+            background: var(--bg-dark); 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            grid-auto-rows: 250px; 
+            gap: 15px;
+            position: relative;
+        }
+        .collage-title { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; width: 100%; text-align: center; }
+        
+        .collage-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.2); transition: 0.3s; }
+        .collage-item { position: relative; overflow: hidden; border: 5px solid #000; outline: 1px solid #333; }
+        .collage-item:hover .collage-img { filter: grayscale(0) scale(1.1); }
+        
+        /* Efecto de borde sucio o roto con pseudo-elementos */
+        .collage-item::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,85,0.3); opacity: 0; transition: 0.3s; z-index: 2; }
+        .collage-item:hover::before { opacity: 1; }
+
+        /* Definición de cuadrícula asimétrica para el collage */
+        .item-1 { grid-column: 1 / 3; grid-row: 1 / 3; transform: rotate(-2deg); }
+        .item-2 { grid-column: 3 / 4; grid-row: 1 / 2; }
+        .item-3 { grid-column: 4 / 5; grid-row: 1 / 3; transform: rotate(1deg); }
+        .item-4 { grid-column: 3 / 4; grid-row: 2 / 3; transform: rotate(-1deg); }
+        .item-5 { grid-column: 1 / 2; grid-row: 3 / 4; }
+        .item-6 { grid-column: 2 / 4; grid-row: 3 / 4; transform: rotate(2deg); }
+        .item-7 { grid-column: 4 / 5; grid-row: 3 / 4; }
+
+        /* === PORTAL DEL SINDICATO (THE VOID) === */
+        .portal-layout { padding: 4rem 5%; max-width: 1400px; margin: 0 auto; }
+        .portal-header { text-align: center; margin-bottom: 4rem; border-bottom: 2px solid var(--neon-cyan); padding-bottom: 20px; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } .glitch-title { font-size: 3rem; } .tour-item { flex-direction: column; text-align: center; gap: 10px; } }
+
+        .panel { background: var(--bg-dirty); padding: 2rem; border: 1px solid #333; position: relative; margin-bottom: 20px; }
+        .panel h3 { color: var(--neon-pink); margin-bottom: 2rem; font-size: 1.8rem; text-shadow: 1px 1px 0 var(--white); }
+        
+        .track-list { list-style: none; }
+        .track-item { display: flex; justify-content: space-between; padding: 15px; background: #000; margin-bottom: 10px; border-left: 3px solid #555; cursor: pointer; }
+        .track-item:hover { border-color: var(--neon-cyan); background: rgba(0,255,255,0.05); }
+        .track-item i { color: var(--neon-cyan); }
+
+        /* Gafete VIP sucio */
+        .vip-pass { 
+            background: linear-gradient(45deg, var(--neon-pink), #80002a); 
+            color: #000; padding: 3rem; text-align: center; 
+            border-radius: 5px; transform: rotate(5deg); 
+            box-shadow: 0 15px 40px rgba(255,0,85,0.4); 
+            border: 5px solid #000;
+            outline: 2px dashed #999;
+        }
+        
+        /* === MODALES === */
+        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
+        .modal { background: var(--bg-dirty); padding: 4rem; border: 3px solid var(--neon-pink); width: 90%; max-width: 450px; text-align: center; box-shadow: 0 0 50px rgba(255,0,85,0.3); }
+        .modal-content input { width: 100%; padding: 15px; margin-bottom: 15px; background: transparent; border: 2px solid #444; color: var(--white); font-size: 1.1rem; }
+        .modal-content input:focus { outline: none; border-color: var(--neon-cyan); }
+
+        /* FOOTER COMPLETO Y AGRESIVO */
+        footer { background: #000; padding: 5rem 5%; text-align: center; border-top: 5px solid var(--neon-pink); margin-top: 5rem; }
+        .social-links { display: flex; justify-content: center; gap: 40px; margin: 3rem 0; font-size: 3rem; }
+        .social-links a { color: var(--white); }
+        .social-links a:hover { color: var(--neon-cyan); transform: scale(1.2); }
+        .footer-logo { font-size: 4rem; font-weight: 900; letter-spacing: -5px; color: var(--white); }
+        .footer-logo span { color: var(--neon-pink); }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="showView('landing')">NOISE<span>SYNDICATE</span></div>
+        <nav id="nav-public">
+            <a onclick="showView('landing')">TOUR</a>
+            <a href="#music">MUSIC</a>
+            <a href="#merch">GEAR</a>
+            <button class="btn-riot" onclick="openModal('login-modal')"><i class="fa-solid fa-skull"></i> THE VOID</button>
+        </nav>
+        <nav id="nav-logged" style="display: none;">
+            <a onclick="showView('landing')">WEBSITE</a>
+            <span style="font-weight: 900; color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan);"><i class="fa-solid fa-bolt"></i> VIP: Max Rebel</span>
+            <button class="btn-riot" onclick="logout()" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">LOGOUT</button>
+        </nav>
+    </header>
+
+    <div id="landing-view" class="view active">
+        
+        <section class="hero">
+            <p style="color: var(--neon-cyan); font-weight: bold; font-size: 1.2rem; letter-spacing: 5px;">NEW RIOT TRANSMISSION</p>
+            <h1 class="glitch-title">SYSTEM OVERLOAD</h1>
+            <button class="btn-riot" style="font-size: 1.5rem; padding: 15px 40px; margin-top: 2rem;"><i class="fa-solid fa-play"></i> LISTEN NOW</button>
+        </section>
+
+        <section id="tour" class="tour">
+            <div style="text-align: center;"><h2 class="section-header">GLOBAL RIOT '26</h2></div>
+            <div class="tour-list">
+                <div class="tour-item">
+                    <div class="tour-date">15 OCT</div>
+                    <div class="tour-city">CDMX, MX <br> For Sol</div>
+                    <button class="btn-riot" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Tickets</button>
+                </div>
+                <div class="tour-item">
+                    <div class="tour-date">18 OCT</div>
+                    <div class="tour-city">BOGOTÁ, COL <br> Movistar Arena</div>
+                    <button class="btn-riot" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Tickets</button>
+                </div>
+                <div class="tour-item">
+                    <div class="tour-date">22 OCT</div>
+                    <div class="tour-city">BUENOS AIRES, ARG <br> Luna Park</div>
+                    <div style="color: var(--neon-pink); border: 2px solid var(--neon-pink); padding: 5px 15px; font-weight: 900; transform: rotate(-5deg);">SOLD OUT</div>
+                </div>
+                <div class="tour-item">
+                    <div class="tour-date">28 OCT</div>
+                    <div class="tour-city">SANTIAGO, CHI <br> Caupolicán</div>
+                    <button class="btn-riot" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Tickets</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="music" class="syndicate-collage">
+            <div class="collage-title"><h2 class="section-header" style="box-shadow: 10px 10px 0 var(--neon-cyan);">THE SYNDICATE</h2></div>
+            
+            <div class="collage-item item-1">
+                <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?q=80&w=600" class="collage-img" alt="Banda en vivo">
+            </div>
+            <div class="collage-item item-2">
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400" class="collage-img" alt="Vocalista">
+            </div>
+            <div class="collage-item item-3">
+                <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=600" class="collage-img" alt="Público enloquecido">
+            </div>
+            <div class="collage-item item-4">
+                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=400" class="collage-img" alt="Guitarrista">
+           <div class="collage-item item-5">
+                <img src="https://images.unsplash.com/photo-1520111007886-f2a8b8491f1b?q=80&w=400" class="collage-img" alt="Baterista">
+            </div>
+            <div class="collage-item item-6">
+                <img src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?q=80&w=600" class="collage-img" alt="Atmósfera concierto">
+            <div class="collage-item item-7">
+                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400" class="collage-img" alt="Pogo">
+            </div>
+        </section>
+
+        <section id="merch" class="merch">
+            <div style="text-align: center;"><h2 class="section-header">RIOT GEAR</h2></div>
+            <div class="grid">
+                <div class="merch-card">
+                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=500" class="merch-img" alt="Camiseta">
+                    <h3 style="margin-bottom: 10px;">Camiseta "System Overload"</h3>
+                    <p style="color: var(--neon-cyan); font-weight: 900; font-size: 1.5rem; margin-bottom: 15px;">$25.00 USD</p>
+                    <button class="btn-riot" style="width: 100%;">Comprar</button>
+                </div>
+                <div class="merch-card">
+                    <img src="https://images.unsplash.com/photo-1603048297172-c92544798d5e?q=80&w=500" class="merch-img" alt="Hoodie">
+                    <h3 style="margin-bottom: 10px;">Hoodie "Noise Syndicate"</h3>
+                    <p style="color: var(--neon-cyan); font-weight: 900; font-size: 1.5rem; margin-bottom: 15px;">$50.00 USD</p>
+                    <button class="btn-riot" style="width: 100%;">Comprar</button>
+                </div>
+                <div class="merch-card">
+                    <img src="https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=500" class="merch-img" alt="Vinyl">
+                    <h3 style="margin-bottom: 10px;">Vinilo Edición Limitada</h3>
+                    <p style="color: var(--neon-cyan); font-weight: 900; font-size: 1.5rem; margin-bottom: 15px;">$35.00 USD</p>
+                    <button class="btn-riot" style="width: 100%;">Comprar</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="portal-view" class="view portal-layout">
+        <div class="portal-header">
+            <h1 class="glitch-title" style="font-size: 4rem;">THE VOID</h1>
+            <p style="color: var(--neon-cyan); letter-spacing: 2px;">IDENTIFICADO: AGENTE MAX REBEL. PROCEDE.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="col-main">
+                <div class="panel">
+                    <h3><i class="fa-solid fa-compact-disc"></i> BOOTLEGS & UNRELEASED</h3>
+                    <ul class="track-list">
+                        <li class="track-item">
+                            <span>01. STATIC ANGER (DEMO V2)</span>
+                            <i class="fa-solid fa-circle-play" style="font-size: 1.5rem;"></i>
+                        </li>
+                        <li class="track-item">
+                            <span>02. NO FUTURE (Acoustic Basement)</span>
+                            <i class="fa-solid fa-circle-play" style="font-size: 1.5rem;"></i>
+                        </li>
+                        <li class="track-item">
+                            <span>03. VOID DANCE (Instrumental Edit)</span>
+                            <i class="fa-solid fa-circle-play" style="font-size: 1.5rem;"></i>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel">
+                    <h3><i class="fa-solid fa-comments"></i> THE UNDERGROUND FORUM</h3>
+                    <p style="color: #666; font-style: italic;">> [MaxRebel]: ¿Alguien tiene el leak del show en Londres? <br> > [RiotGrl]: ¡Sí! Checa tu bandeja.</p>
+                </div>
+            </div>
+
+            <div class="col-side">
+                <div class="vip-pass">
+                    <i class="fa-solid fa-barcode" style="font-size: 5rem; color: #000;"></i>
+                    <h2 style="font-size: 1.8rem; margin: 10px 0;">MAX REBEL</h2>
+                    <p>STATUS: FUNDADOR</p>
+                    <p>ID: NS-99482</p>
+                    <div style="background: #000; color: var(--neon-cyan); font-weight: 900; margin-top: 15px; padding: 5px; font-size: 1.2rem; transform: rotate(-3deg);">ALL ACCESS</div>
+                </div>
+                <div class="panel" style="margin-top: 30px; text-align: center;">
+                    <h3><i class="fa-solid fa-store"></i> VAULT MERCH</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Diseños exclusivos para miembros de The Void.</p>
+                    <button class="btn-riot btn-cyan" style="width: 100%;">Entrar a la Bóveda</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">NOISE<span>SYNDICATE</span></div>
+        <p style="opacity: 0.6; font-size: 0.8rem; margin: 10px 0;">RIOT TRANSMISSIONS. DESTROY THE SYSTEM.</p>
+        
+        <div class="social-links">
+            <a href="#"><i class="fa-brands fa-spotify"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        
+        <p style="opacity: 0.3; font-size: 0.7rem;">&copy; 2026 Noise Syndicate. Todos los derechos reservados. <br> Plataforma Demo para Fans Reales.</p>
+    </footer>
+
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal">
+            <span style="position: absolute; top: 10px; right: 20px; font-size: 2rem; cursor: pointer; color: #555;" onclick="closeModal('login-modal')">&times;</span>
+            <i class="fa-solid fa-skull" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 10px;"></i>
+            <h2 style="margin-bottom: 20px; font-size: 2rem; color: var(--white); text-shadow: 2px 2px 0 #000;">ENTER THE VOID</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">Identifícate. Solo para el Sindicato.</p>
+            
+            <form class="modal-content" onsubmit="loginAsVoid(event)">
+                <input type="text" placeholder="Código de Operativo / Email" required>
+                <input type="password" placeholder="Clave de Acceso" required>
+                <button type="submit" class="btn-riot" style="width: 100%; font-size: 1.2rem; padding: 15px;">CONECTAR</button>
+            </form>
+            <p style="margin-top: 20px; font-size: 0.8rem; color: var(--neon-cyan); text-decoration: underline; cursor: pointer;">¿No tienes acceso? Únete a la resistencia.</p>
+        </div>
+    </div>
+
+    <script>
+        // Navegación SPA
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(id + '-view').classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Modales
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        // Simulación Login Fan Club
+        function loginAsVoid(e) {
+            e.preventDefault();
+            closeModal('login-modal');
+            document.getElementById('nav-public').style.display = 'none';
+            document.getElementById('nav-logged').style.display = 'flex';
+            showView('portal');
+        }
+
+        // Simulación Logout
+        function logout() {
+            document.getElementById('nav-logged').style.display = 'none';
+            document.getElementById('nav-public').style.display = 'flex';
+            showView('landing');
+        }
+    </script>
+</body>
+</html>
