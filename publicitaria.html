@@ -17,12 +17,13 @@
             --border-color: #DEE2E6;
         }
 
+        /* Bloqueo de desbordamiento horizontal global */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-white); color: var(--text-main); line-height: 1.6; scroll-behavior: smooth; }
+        body { background-color: var(--bg-white); color: var(--text-main); line-height: 1.6; scroll-behavior: smooth; overflow-x: hidden; }
 
         /* === NAVBAR === */
         header {
-            background-color: var(--bg-white); padding: 0 5%; height: 90px;
+            background-color: var(--bg-white); padding: 0 5%; min-height: 90px;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
@@ -33,14 +34,14 @@
         .logo-text { font-size: 1.5rem; font-weight: 800; color: var(--dark-blue); line-height: 1.1; }
         .logo-text span { font-size: 0.9rem; font-weight: 400; color: var(--primary-blue); letter-spacing: 1px; text-transform: uppercase; }
 
-        nav { display: flex; gap: 30px; align-items: center; }
+        nav { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
         nav a { text-decoration: none; color: var(--text-main); font-weight: 600; transition: color 0.3s; }
         nav a:hover { color: var(--primary-blue); }
         
         .btn-primary {
             background-color: var(--primary-blue); color: white; padding: 12px 25px;
             border-radius: 8px; font-weight: bold; text-decoration: none; transition: 0.3s;
-            border: 2px solid var(--primary-blue); display: inline-flex; align-items: center; gap: 8px;
+            border: 2px solid var(--primary-blue); display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
         }
         .btn-primary:hover { background-color: transparent; color: var(--primary-blue); }
 
@@ -54,7 +55,7 @@
         .hero-content h1 span { color: var(--primary-blue); }
         .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; }
         
-        .hero-stats { display: flex; gap: 30px; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .hero-stats { display: flex; gap: 30px; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color); flex-wrap: wrap; }
         .stat-item h3 { font-size: 2rem; color: var(--primary-blue); }
         .stat-item p { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
 
@@ -69,7 +70,8 @@
 
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            /* Se reduce de 320px a 280px para que quepa en móviles pequeños sin desbordar */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2.5rem;
             max-width: 1200px;
             margin: 0 auto;
@@ -114,11 +116,32 @@
         .footer-socials a:hover { opacity: 1; color: #4FC3F7; }
         .copyright { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; font-size: 0.9rem; opacity: 0.6; }
 
-        /* Responsive */
+        /* =========================================
+           MEDIA QUERIES (RESPONSIVE FIXES)
+           ========================================= */
         @media (max-width: 900px) {
             .hero { flex-direction: column; text-align: center; padding-top: 3rem; }
             .hero-stats { justify-content: center; }
-            nav { display: none; }
+            
+            /* En lugar de ocultar la navegación, la apilamos para no perder funcionalidad */
+            header { flex-direction: column; height: auto; padding: 20px 5%; gap: 15px; }
+            nav { justify-content: center; gap: 15px; width: 100%; }
+            .logo-text { font-size: 1.3rem; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1.1rem; }
+            .btn-primary { width: 100%; }
+            
+            nav { flex-direction: column; gap: 10px; }
+            nav a { padding: 10px 0; border-bottom: 1px solid var(--border-color); width: 100%; text-align: center; }
+            nav a.btn-primary { border: 2px solid var(--primary-blue); }
+            
+            .section-header h2 { font-size: 2rem; }
+            
+            /* Las estadísticas en una sola columna para pantallas muy estrechas */
+            .hero-stats { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
@@ -134,10 +157,10 @@
             <a href="#portafolio">Nuestros Demos</a>
             <a href="#servicios">Servicios</a>
             <a href="https://wa.me/5215581697122?text=Hola%20PH%20Publicitaria,%20me%20gustaría%20cotizar%20un%20proyecto%20web" 
-   target="_blank" 
-   class="btn-primary">
-   <i class="fa-brands fa-whatsapp"></i> Cotizar Proyecto
-</a>
+               target="_blank" 
+               class="btn-primary">
+               <i class="fa-brands fa-whatsapp"></i> Cotizar Proyecto
+            </a>
         </nav>
     </header>
 
@@ -176,99 +199,99 @@
         <div class="portfolio-grid">
             
             <div class="project-card">
-    <div class="project-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Escuela">
-        
-        <div class="project-overlay">
-            <a href="https://mikeleonors.github.io/demos-ph-publicitaria/escuela.html" target="_blank" class="btn-demo">
-                <i class="fa-solid fa-eye"></i> Abrir Demo
-            </a>
-        </div>
-    </div>
+                <div class="project-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Escuela">
+                    
+                    <div class="project-overlay">
+                        <a href="https://mikeleonors.github.io/demos-ph-publicitaria/escuela.html" target="_blank" class="btn-demo">
+                            <i class="fa-solid fa-eye"></i> Abrir Demo
+                        </a>
+                    </div>
+                </div>
 
-    <div class="project-info">
-        <div class="project-category">Sector Educativo</div>
-        <h3 class="project-title">Portal Escolar Integral</h3>
-        <p class="project-desc">Plataforma completa para colegios. Incluye portal de alumnos con visualización de horarios, calificaciones y estado de pagos de colegiaturas.</p>
-  <div class="project-tags">
+                <div class="project-info">
+                    <div class="project-category">Sector Educativo</div>
+                    <h3 class="project-title">Portal Escolar Integral</h3>
+                    <p class="project-desc">Plataforma completa para colegios. Incluye portal de alumnos con visualización de horarios, calificaciones y estado de pagos de colegiaturas.</p>
+                    <div class="project-tags">
                         <span class="tag">Login Estudiantes</span>
                         <span class="tag">Panel Directivo</span>
                         <span class="tag">Finanzas</span>
-        </div>
-</div>
+                    </div>
+                </div>
             </div>
 
             <div class="project-card">
-    <div class="project-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Inmobiliaria">
-        <div class="project-overlay">
-            <a href="https://mikeleonors.github.io/demos-ph-publicitaria/inmobiliaria.html" target="_blank" class="btn-demo">
-                <i class="fa-solid fa-eye"></i> Abrir Demo
-            </a>
-        </div>
-    </div>
-    <div class="project-info">
-        <div class="project-category">Bienes Raíces</div>
-        <h3 class="project-title">Agencia Inmobiliaria V2</h3>
-        <p class="project-desc">Sitio de captación y venta de propiedades con un "Portal del Comprador" para seguimiento de trámites, envío de documentos y simulador hipotecario.</p>
-        <div class="project-tags">
-            <span class="tag">Catálogo Dinámico</span>
-            <span class="tag">Expediente Digital</span>
-        </div>
-    </div>
-</div>
-<div class="project-card">
-    <div class="project-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Clínica Dental">
-        <div class="project-overlay">
-            <a href="https://mikeleonors.github.io/demos-ph-publicitaria/consultorio.html" target="_blank" class="btn-demo">
-                <i class="fa-solid fa-eye"></i> Abrir Demo
-            </a>
-        </div>
-    </div>
-    <div class="project-info">
-        <div class="project-category">Salud y Medicina</div>
-        <h3 class="project-title">Clínica & Consultorio Dental</h3>
-        <p class="project-desc">Sistema de gestión médica. Los pacientes pueden agendar citas y ver su odontograma. Los doctores tienen una agenda inteligente semaforizada.</p>
-        <div class="project-tags">
-            <span class="tag">Agenda Citas</span>
-            <span class="tag">Odontograma</span>
-            <span class="tag">Marca Personal</span>
-        </div>
-    </div>
-</div>
-<div class="project-card">
-    <div class="project-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Banda de Rock">
-        <div class="project-overlay">
-            <a href="https://mikeleonors.github.io/demos-ph-publicitaria/banda.html" target="_blank" class="btn-demo">
-                <i class="fa-solid fa-eye"></i> Abrir Demo
-            </a>
-        </div>
-    </div>
-    <div class="project-info">
-        <div class="project-category">Entretenimiento & Arte</div>
-        <h3 class="project-title">Sitio Web Oficial (Banda)</h3>
-        <p class="project-desc">Diseño agresivo y visual "Riot" con animaciones glitch, venta de mercancía (merch), fechas de tour y un Fan Club exclusivo (The Void).</p>
-        <div class="project-tags">
-            <span class="tag">Animaciones CSS</span>
-            <span class="tag">VIP Fan Club</span>
-            <span class="tag">Dark Mode</span>
-        </div>
-    </div>
-</div>
+                <div class="project-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Inmobiliaria">
+                    <div class="project-overlay">
+                        <a href="https://mikeleonors.github.io/demos-ph-publicitaria/inmobiliaria.html" target="_blank" class="btn-demo">
+                            <i class="fa-solid fa-eye"></i> Abrir Demo
+                        </a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Bienes Raíces</div>
+                    <h3 class="project-title">Agencia Inmobiliaria V2</h3>
+                    <p class="project-desc">Sitio de captación y venta de propiedades con un "Portal del Comprador" para seguimiento de trámites, envío de documentos y simulador hipotecario.</p>
+                    <div class="project-tags">
+                        <span class="tag">Catálogo Dinámico</span>
+                        <span class="tag">Expediente Digital</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Clínica Dental">
+                    <div class="project-overlay">
+                        <a href="https://mikeleonors.github.io/demos-ph-publicitaria/consultorio.html" target="_blank" class="btn-demo">
+                            <i class="fa-solid fa-eye"></i> Abrir Demo
+                        </a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Salud y Medicina</div>
+                    <h3 class="project-title">Clínica & Consultorio Dental</h3>
+                    <p class="project-desc">Sistema de gestión médica. Los pacientes pueden agendar citas y ver su odontograma. Los doctores tienen una agenda inteligente semaforizada.</p>
+                    <div class="project-tags">
+                        <span class="tag">Agenda Citas</span>
+                        <span class="tag">Odontograma</span>
+                        <span class="tag">Marca Personal</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="project-img" alt="Banda de Rock">
+                    <div class="project-overlay">
+                        <a href="https://mikeleonors.github.io/demos-ph-publicitaria/banda.html" target="_blank" class="btn-demo">
+                            <i class="fa-solid fa-eye"></i> Abrir Demo
+                        </a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Entretenimiento & Arte</div>
+                    <h3 class="project-title">Sitio Web Oficial (Banda)</h3>
+                    <p class="project-desc">Diseño agresivo y visual "Riot" con animaciones glitch, venta de mercancía (merch), fechas de tour y un Fan Club exclusivo (The Void).</p>
+                    <div class="project-tags">
+                        <span class="tag">Animaciones CSS</span>
+                        <span class="tag">VIP Fan Club</span>
+                        <span class="tag">Dark Mode</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <footer>
         <div style="margin-bottom: 2rem;">
             <img src="https://drive.google.com/thumbnail?id=1akuwCUAckMuJ1D8kA7fIdFQvYwXsWG8d&sz=w1000" alt="PH Publicitaria Logo" class="logo-img">
-
         </div>
         
         <h2>PH Publicitaria Servicios Web</h2>
         <p style="max-width: 500px; margin: 1rem auto; opacity: 0.8;">Transformamos ideas en ecosistemas digitales rentables. Expertos en diseño UI/UX y desarrollo frontend funcional.</p>
-        
         
         <div class="copyright">
             &copy; 2026 PH Publicitaria. Todos los derechos reservados.
