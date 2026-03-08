@@ -36,11 +36,11 @@
         nav a { text-decoration: none; color: var(--text-dark); font-weight: 600; cursor: pointer; transition: color 0.3s; }
         nav a:hover { color: var(--primary-teal); }
 
-        .btn-outline { border: 2px solid var(--primary-teal); padding: 8px 20px; border-radius: 8px; color: var(--primary-teal); font-weight: bold; background: transparent; cursor: pointer; transition: 0.3s; }
+        .btn-outline { border: 2px solid var(--primary-teal); padding: 8px 20px; border-radius: 8px; color: var(--primary-teal); font-weight: bold; background: transparent; cursor: pointer; transition: 0.3s; text-align: center; }
         .btn-outline:hover { background: var(--primary-teal); color: white; }
         .btn-solid { background: var(--primary-teal); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-solid:hover { background: var(--dark-teal); }
-        .btn-accent { background: var(--accent-coral); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-accent { background: var(--accent-coral); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; text-align: center; }
         .btn-accent:hover { background: #E11D48; }
 
         /* === HERO SECTION === */
@@ -72,7 +72,8 @@
         .panel h3 { color: var(--dark-teal); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
         
         /* Tablas */
-        table { width: 100%; border-collapse: collapse; }
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
         th { color: #64748B; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
         tr:hover td { background-color: var(--bg-light); }
@@ -90,7 +91,7 @@
 
         /* === MODALES === */
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.7); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
-        .modal { background: white; padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 450px; position: relative; }
+        .modal { background: white; padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #94A3B8; }
         
         .form-group { margin-bottom: 1.2rem; }
@@ -103,13 +104,8 @@
         .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-weight: bold; color: #64748B; }
         .tab.active { color: var(--primary-teal); border-bottom: 3px solid var(--primary-teal); margin-bottom: -2px; }
 
-        @media (max-width: 800px) {
-            .hero { flex-direction: column; text-align: center; padding-top: 2rem; }
-            .hero-text { padding-right: 0; margin-bottom: 2rem; }
-            .grid-layout { grid-template-columns: 1fr; }
-            .next-appointment { flex-direction: column; text-align: center; gap: 15px; }
-        }
-footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
+        /* === FOOTER === */
+        footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 3rem; }
         .footer-col h4 { margin-bottom: 1.5rem; font-size: 1.2rem; position: relative; }
         .footer-col h4::after { content: ''; width: 40px; height: 3px; background: var(--accent-coral); position: absolute; bottom: -8px; left: 0; }
@@ -120,6 +116,54 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
         .social-links i { font-size: 1.5rem; cursor: pointer; transition: 0.3s; }
         .social-links i:hover { color: var(--accent-coral); }
         .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center; font-size: 0.9rem; opacity: 0.6; }
+
+        /* =========================================
+           MEDIA QUERIES (RESPONSIVE FIXES)
+           ========================================= */
+        @media (max-width: 1024px) {
+            .hero-text h1 { font-size: 2.8rem; }
+        }
+
+        @media (max-width: 800px) {
+            /* Navbar Header apilado */
+            header { flex-direction: column; height: auto; padding: 15px 5%; gap: 15px; }
+            nav { flex-wrap: wrap; justify-content: center; width: 100%; }
+
+            /* Hero simplificado */
+            .hero { flex-direction: column; text-align: center; padding-top: 2rem; }
+            .hero-text { padding-right: 0; margin-bottom: 2rem; }
+            .hero-text h1 { font-size: 2.5rem; }
+            
+            /* Grids de layout a una columna */
+            .grid-layout { grid-template-columns: 1fr; }
+            .next-appointment { flex-direction: column; text-align: center; gap: 15px; }
+
+            /* Ajustes Perfil Doctor */
+            #doctor-profile { padding: 3rem 5% !important; text-align: center; gap: 2rem !important; }
+            #doctor-profile div:last-child { display: flex; flex-direction: column; align-items: center; }
+        }
+
+        @media (max-width: 600px) {
+            .services h2 { font-size: 2rem; }
+            
+            /* Dashboards: Botones y cabeceras de ancho completo */
+            .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .dash-header > div:last-child { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+            .dash-header button { width: 100%; justify-content: center; }
+            
+            /* Modal de Citas: Arreglo de form fields apilados */
+            .form-group-flex { flex-direction: column !important; }
+            
+            /* Hero: Botones a ancho completo */
+            .hero-text div[style*="display: flex"] { flex-direction: column; width: 100%; gap: 10px !important; }
+            .hero-text button { width: 100%; }
+            
+            /* Odontograma adaptable a pantallas delgadas */
+            .panel > div[style*="grid-template-columns: repeat(8"] { grid-template-columns: repeat(4, 1fr) !important; gap: 15px !important; }
+            
+            /* Ajuste contenedor ubicación mapa */
+            #location div[style*="minmax"] { grid-template-columns: 1fr !important; }
+        }
     </style>
 </head>
 <body>
@@ -182,53 +226,54 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
                 </div>
             </div>
         </section>
-<section id="doctor-profile" style="padding: 5rem 5%; background: #f1f5f9; display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
-    <div style="flex: 1; min-width: 300px;">
-        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=800" alt="Dr. Alejandro Ruiz" style="width: 100%; border-radius: 20px; border: 8px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
-    </div>
-    <div style="flex: 1.5; min-width: 300px;">
-        <span style="color: var(--primary-teal); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director Clínico</span>
-        <h2 style="color: var(--dark-teal); font-size: 2.5rem; margin: 10px 0;">Dr. Alejandro Ruiz</h2>
-        <p style="font-size: 1.1rem; color: #475569; margin-bottom: 1.5rem;">
-            Con más de 15 años de experiencia y especialidad en Implantología Avanzada por la UNAM, el Dr. Ruiz ha transformado más de 5,000 sonrisas. Su enfoque combina la calidez humana con la precisión tecnológica.
-        </p>
-        <ul style="list-style: none; margin-bottom: 2rem;">
-            <li style="margin-bottom: 10px;"><i class="fa-solid fa-certificate" style="color: var(--primary-teal); margin-right: 10px;"></i> Certificado por el Consejo Mexicano de Odontología.</li>
-            <li style="margin-bottom: 10px;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary-teal); margin-right: 10px;"></i> Especialista en Estética Dental y Diseño de Sonrisa.</li>
-            <li style="margin-bottom: 10px;"><i class="fa-solid fa-award" style="color: var(--primary-teal); margin-right: 10px;"></i> Premio a la Excelencia Médica 2024.</li>
-        </ul>
-        <button class="btn-solid" onclick="openModal('booking-modal')">Conocer al Dr. Ruiz</button>
-    </div>
-</section>
 
-<section id="location" style="padding: 5rem 5%; background: white;">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
-        <div>
-            <h2 style="color: var(--dark-teal); font-size: 2rem; margin-bottom: 1.5rem;">¿Dónde estamos?</h2>
-            <div style="margin-bottom: 2rem;">
-                <p style="font-weight: bold; color: var(--text-dark);"><i class="fa-solid fa-location-dot" style="color: var(--primary-teal);"></i> Dirección:</p>
-                <p style="color: #64748B;">Av. Paseo de la Reforma 405, Piso 10, Juárez, 06600 Ciudad de México, CDMX.</p>
+        <section id="doctor-profile" style="padding: 5rem 5%; background: #f1f5f9; display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=800" alt="Dr. Alejandro Ruiz" style="width: 100%; border-radius: 20px; border: 8px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
             </div>
-            <div style="margin-bottom: 2rem;">
-                <p style="font-weight: bold; color: var(--text-dark);"><i class="fa-solid fa-clock" style="color: var(--primary-teal);"></i> Horarios de Atención:</p>
-                <p style="color: #64748B;">Lunes a Viernes: 9:00 AM - 7:00 PM<br>Sábados: 10:00 AM - 2:00 PM</p>
+            <div style="flex: 1.5; min-width: 300px;">
+                <span style="color: var(--primary-teal); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director Clínico</span>
+                <h2 style="color: var(--dark-teal); font-size: 2.5rem; margin: 10px 0;">Dr. Alejandro Ruiz</h2>
+                <p style="font-size: 1.1rem; color: #475569; margin-bottom: 1.5rem;">
+                    Con más de 15 años de experiencia y especialidad en Implantología Avanzada por la UNAM, el Dr. Ruiz ha transformado más de 5,000 sonrisas. Su enfoque combina la calidez humana con la precisión tecnológica.
+                </p>
+                <ul style="list-style: none; margin-bottom: 2rem;">
+                    <li style="margin-bottom: 10px;"><i class="fa-solid fa-certificate" style="color: var(--primary-teal); margin-right: 10px;"></i> Certificado por el Consejo Mexicano de Odontología.</li>
+                    <li style="margin-bottom: 10px;"><i class="fa-solid fa-graduation-cap" style="color: var(--primary-teal); margin-right: 10px;"></i> Especialista en Estética Dental y Diseño de Sonrisa.</li>
+                    <li style="margin-bottom: 10px;"><i class="fa-solid fa-award" style="color: var(--primary-teal); margin-right: 10px;"></i> Premio a la Excelencia Médica 2024.</li>
+                </ul>
+                <button class="btn-solid" onclick="openModal('booking-modal')">Conocer al Dr. Ruiz</button>
             </div>
-            <div style="display: flex; gap: 15px;">
-                <a href="#" style="color: var(--primary-teal); font-size: 1.5rem;"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#" style="color: var(--primary-teal); font-size: 1.5rem;"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" style="color: var(--primary-teal); font-size: 1.5rem;"><i class="fa-brands fa-whatsapp"></i></a>
+        </section>
+
+        <section id="location" style="padding: 5rem 5%; background: white;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem;">
+                <div>
+                    <h2 style="color: var(--dark-teal); font-size: 2rem; margin-bottom: 1.5rem;">¿Dónde estamos?</h2>
+                    <div style="margin-bottom: 2rem;">
+                        <p style="font-weight: bold; color: var(--text-dark);"><i class="fa-solid fa-location-dot" style="color: var(--primary-teal);"></i> Dirección:</p>
+                        <p style="color: #64748B;">Av. Paseo de la Reforma 405, Piso 10, Juárez, 06600 Ciudad de México, CDMX.</p>
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <p style="font-weight: bold; color: var(--text-dark);"><i class="fa-solid fa-clock" style="color: var(--primary-teal);"></i> Horarios de Atención:</p>
+                        <p style="color: #64748B;">Lunes a Viernes: 9:00 AM - 7:00 PM<br>Sábados: 10:00 AM - 2:00 PM</p>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" style="color: var(--primary-teal); font-size: 1.5rem;"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" style="color: var(--primary-teal); font-size: 1.5rem;"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" style="color: var(--primary-teal); font-size: 1.5rem;"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div style="background: #e2e8f0; border-radius: 20px; min-height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #475569; overflow: hidden; position: relative;">
+                    <i class="fa-solid fa-map-location-dot" style="font-size: 4rem; margin-bottom: 10px;"></i>
+                    <p style="font-weight: bold;">Mapa Interactivo</p>
+                    <p style="font-size: 0.9rem;">Click para abrir en Google Maps</p>
+                    <div style="position: absolute; bottom: 0; background: rgba(255,255,255,0.9); width: 100%; padding: 15px; text-align: center;">
+                        <a href="https://maps.google.com" target="_blank" style="color: var(--primary-teal); font-weight: bold; text-decoration: none;">CÓMO LLEGAR <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div style="background: #e2e8f0; border-radius: 20px; min-height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #475569; overflow: hidden; position: relative;">
-            <i class="fa-solid fa-map-location-dot" style="font-size: 4rem; margin-bottom: 10px;"></i>
-            <p style="font-weight: bold;">Mapa Interactivo</p>
-            <p style="font-size: 0.9rem;">Click para abrir en Google Maps</p>
-            <div style="position: absolute; bottom: 0; background: rgba(255,255,255,0.9); width: 100%; padding: 15px; text-align: center;">
-                <a href="https://maps.google.com" target="_blank" style="color: var(--primary-teal); font-weight: bold; text-decoration: none;">CÓMO LLEGAR <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
     </div>
 
     <div id="patient-view" class="view dashboard">
@@ -273,12 +318,14 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
 
                 <div class="panel">
                     <h3><i class="fa-solid fa-file-medical"></i> Historial Clínico y Recetas</h3>
-                    <table>
-                        <tr><th>Fecha</th><th>Tratamiento</th><th>Documento</th></tr>
-                        <tr><td>10 Feb 2026</td><td>Extracción 3er Molar</td><td><a href="#" style="color: var(--primary-teal);"><i class="fa-solid fa-download"></i> Receta Analgésicos</a></td></tr>
-                        <tr><td>15 Ene 2026</td><td>Radiografía Panorámica</td><td><a href="#" style="color: var(--primary-teal);"><i class="fa-solid fa-image"></i> Ver Rayos X</a></td></tr>
-                        <tr><td>10 Ene 2026</td><td>Valoración Inicial</td><td><a href="#" style="color: var(--primary-teal);"><i class="fa-solid fa-file-pdf"></i> Diagnóstico</a></td></tr>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <tr><th>Fecha</th><th>Tratamiento</th><th>Documento</th></tr>
+                            <tr><td>10 Feb 2026</td><td>Extracción 3er Molar</td><td><a href="#" style="color: var(--primary-teal);"><i class="fa-solid fa-download"></i> Receta Analgésicos</a></td></tr>
+                            <tr><td>15 Ene 2026</td><td>Radiografía Panorámica</td><td><a href="#" style="color: var(--primary-teal);"><i class="fa-solid fa-image"></i> Ver Rayos X</a></td></tr>
+                            <tr><td>10 Ene 2026</td><td>Valoración Inicial</td><td><a href="#" style="color: var(--primary-teal);"><i class="fa-solid fa-file-pdf"></i> Diagnóstico</a></td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -307,7 +354,7 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
                         <i class="fa-solid fa-tooth"></i>
                     </div>
                     <div style="margin-top: 15px; font-size: 0.8rem;">
-                        <span style="color: var(--primary-teal);"><i class="fa-solid fa-circle"></i> Restaurado</span> &nbsp;
+                        <span style="color: var(--primary-teal);"><i class="fa-solid fa-circle"></i> Restaurado</span>  
                         <span style="color: var(--accent-coral);"><i class="fa-solid fa-circle"></i> Por tratar</span>
                     </div>
                 </div>
@@ -328,50 +375,52 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
         </div>
 
         <div class="grid-layout">
-            <div class="panel" style="grid-column: span 2;">
+            <div class="panel" style="grid-column: 1 / -1;">
                 <h3><i class="fa-regular fa-clock"></i> Citas del Día</h3>
-                <table>
-                    <tr>
-                        <th style="width: 100px;">Hora</th>
-                        <th>Paciente</th>
-                        <th>Tratamiento / Motivo</th>
-                        <th>Sillón</th>
-                        <th>Estatus</th>
-                        <th>Acción</th>
-                    </tr>
-                    <tr>
-                        <td><strong>09:00</strong></td>
-                        <td>Carlos Mendoza (1ra vez)</td>
-                        <td>Valoración y Presupuesto</td>
-                        <td>Unidad 1</td>
-                        <td><span class="badge" style="background: #10B981;">En Sala</span></td>
-                        <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;">Abrir Historia</button></td>
-                    </tr>
-                    <tr>
-                        <td><strong>10:30</strong></td>
-                        <td>María Fernanda López</td>
-                        <td>Endodoncia Pieza 36 (Cita 2)</td>
-                        <td>Unidad 1</td>
-                        <td><span class="badge bg-warning">Confirmada</span></td>
-                        <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;">Ver Rayos X</button></td>
-                    </tr>
-                    <tr style="background-color: #FEF2F2;">
-                        <td><strong>12:00</strong></td>
-                        <td>Roberto Gómez</td>
-                        <td>Ajuste Brackets</td>
-                        <td>Unidad 2</td>
-                        <td><span class="badge bg-coral">Canceló</span></td>
-                        <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem; border-color: #CBD5E1; color: #64748B;">Reagendar</button></td>
-                    </tr>
-                    <tr>
-                        <td><strong>16:00</strong></td>
-                        <td>Sofía Ramírez</td>
-                        <td>Limpieza Ultrasónica</td>
-                        <td>Unidad 1</td>
-                        <td><span class="badge bg-warning">Por Confirmar</span></td>
-                        <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;"><i class="fa-brands fa-whatsapp"></i> Enviar Recordatorio</button></td>
-                    </tr>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th style="width: 100px;">Hora</th>
+                            <th>Paciente</th>
+                            <th>Tratamiento / Motivo</th>
+                            <th>Sillón</th>
+                            <th>Estatus</th>
+                            <th>Acción</th>
+                        </tr>
+                        <tr>
+                            <td><strong>09:00</strong></td>
+                            <td>Carlos Mendoza (1ra vez)</td>
+                            <td>Valoración y Presupuesto</td>
+                            <td>Unidad 1</td>
+                            <td><span class="badge" style="background: #10B981;">En Sala</span></td>
+                            <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;">Abrir Historia</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>10:30</strong></td>
+                            <td>María Fernanda López</td>
+                            <td>Endodoncia Pieza 36 (Cita 2)</td>
+                            <td>Unidad 1</td>
+                            <td><span class="badge bg-warning">Confirmada</span></td>
+                            <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;">Ver Rayos X</button></td>
+                        </tr>
+                        <tr style="background-color: #FEF2F2;">
+                            <td><strong>12:00</strong></td>
+                            <td>Roberto Gómez</td>
+                            <td>Ajuste Brackets</td>
+                            <td>Unidad 2</td>
+                            <td><span class="badge bg-coral">Canceló</span></td>
+                            <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem; border-color: #CBD5E1; color: #64748B;">Reagendar</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>16:00</strong></td>
+                            <td>Sofía Ramírez</td>
+                            <td>Limpieza Ultrasónica</td>
+                            <td>Unidad 1</td>
+                            <td><span class="badge bg-warning">Por Confirmar</span></td>
+                            <td><button class="btn-outline" style="padding: 4px 10px; font-size: 0.8rem;"><i class="fa-brands fa-whatsapp"></i> Enviar Recordatorio</button></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
             <div class="panel">
@@ -404,6 +453,7 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
             </div>
         </div>
     </div>
+
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -429,12 +479,13 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2026 Sonrisa Perfecta Clínica Dental. Todos los derechos reservados. | Diseñado para Demo Profesional.
+            © 2026 Sonrisa Perfecta Clínica Dental. Todos los derechos reservados. | Diseñado para Demo Profesional.
         </div>
     </footer>
+
     <div id="login-modal" class="modal-overlay">
         <div class="modal">
-            <span class="close-btn" onclick="closeModal('login-modal')">&times;</span>
+            <span class="close-btn" onclick="closeModal('login-modal')">×</span>
             <div style="text-align: center; margin-bottom: 20px;">
                 <i class="fa-solid fa-tooth" style="font-size: 3rem; color: var(--primary-teal);"></i>
                 <h2 style="color: var(--dark-teal); margin-top: 10px;">Acceso al Sistema</h2>
@@ -464,7 +515,7 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
 
     <div id="booking-modal" class="modal-overlay">
         <div class="modal">
-            <span class="close-btn" onclick="closeModal('booking-modal')">&times;</span>
+            <span class="close-btn" onclick="closeModal('booking-modal')">×</span>
             <h2 style="color: var(--dark-teal); margin-bottom: 5px;">Agendar Cita</h2>
             <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 20px;">Elige el servicio y horario de tu preferencia.</p>
             
@@ -479,7 +530,7 @@ footer { background: var(--dark-teal); color: white; padding: 4rem 5% 2rem 5%; }
                         <option>Dolor o Emergencia</option>
                     </select>
                 </div>
-                <div class="form-group" style="display: flex; gap: 10px;">
+                <div class="form-group form-group-flex" style="display: flex; gap: 10px;">
                     <div style="flex: 1;">
                         <label>Fecha</label>
                         <input type="date" required>
