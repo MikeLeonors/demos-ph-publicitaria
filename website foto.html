@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE AFTERPARTY | Curaduría Visual de Alta Gama</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ================= RESET & VARIABLES ================= */
+        :root {
+            --bg-base: #040404;
+            --bg-deep: #000000;
+            --bg-surface: #0a0a0a;
+            --text-main: #FFFFFF;
+            --text-muted: #888888;
+            --accent: #E5C158; /* Oro Metálico Champagne */
+            --accent-glow: rgba(229, 193, 88, 0.15);
+            --border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(5, 5, 5, 0.92);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
+        }
+
+        /* Ruido digital sutil */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.04"/%3E%3C/svg%3E');
+            pointer-events: none; z-index: 9999;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-weight: 500;
+            line-height: 1.1;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        a:hover { color: var(--accent); }
+
+        /* ================= BOTONES Y FLOTANTES ================= */
+        .btn-primary {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 1.2rem 2.5rem;
+            background: var(--text-main); color: #000;
+            font-family: 'Space Mono', monospace; font-weight: 700;
+            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px;
+            cursor: pointer; border: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .floating-booking {
+            position: fixed; bottom: 2rem; right: 2rem;
+            background: var(--accent); color: #000;
+            padding: 1rem 1.5rem; border-radius: 50px;
+            font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 10px 30px var(--accent-glow);
+            z-index: 9000; cursor: pointer; border: none;
+            display: flex; align-items: center; gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-booking::before {
+            content: "•"; color: #000; font-size: 1.5rem; line-height: 0; animation: pulse 2s infinite;
+        }
+
+        .floating-booking:hover { transform: scale(1.05); }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* ================= HERO SECTION ================= */
+        .hero {
+            position: relative; height: 100vh; display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 5% 5% 8% 5%; overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 120%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, var(--bg-base) 100%), url('https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            z-index: -1; will-change: transform;
+        }
+
+        .reveal-mask { overflow: hidden; display: block; }
+        .hero-title { font-size: clamp(3.5rem, 8vw, 8.5rem); letter-spacing: -1.5px; transform: translateY(100%); color: var(--text-main); }
+        .hero-desc { max-width: 550px; font-size: 1.15rem; color: var(--text-muted); margin: 2rem 0; opacity: 0; font-weight: 300; line-height: 1.6; }
+
+        /* ================= SECCIÓN DE VENUES ================= */
+        .venues-section { padding: 15vh 5%; background-color: var(--bg-deep); border-bottom: 1px solid var(--border); }
+        .section-header { margin-bottom: 4rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem; }
+        .section-header h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        .section-header p { color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.85rem; max-width: 300px; }
+
+        .venues-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        
+        .venue-card {
+            position: relative; height: 60vh; min-height: 400px; overflow: hidden;
+            border: 1px solid var(--border); cursor: crosshair;
+        }
+
+        .venue-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(100%) brightness(0.6); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .venue-card:hover img { filter: grayscale(0%) brightness(0.9); transform: scale(1.05); }
+
+        .venue-info {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            transform: translateY(20px); transition: transform 0.5s ease;
+        }
+
+        .venue-card:hover .venue-info { transform: translateY(0); }
+        .venue-info h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .venue-info p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; font-weight: 300; }
+
+        /* ================= DOSSIER INTERACTIVO (TIMELINE) ================= */
+        .timeline-section { background-color: var(--bg-surface); overflow: hidden; position: relative; }
+        .timeline-header { padding: 8vh 5% 2vh 5%; }
+        .timeline-container { display: flex; width: 400vw; height: 80vh; will-change: transform; }
+        .timeline-panel { width: 100vw; height: 100%; padding: 0 5%; display: flex; align-items: center; gap: 5rem; }
+        .timeline-text { flex: 1; max-width: 450px; }
+        .timeline-time { font-family: 'Space Mono', monospace; font-size: 1.2rem; color: var(--accent); margin-bottom: 1.5rem; display: block; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .timeline-text h3 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .timeline-text p { color: var(--text-muted); line-height: 1.7; font-weight: 300; }
+        .timeline-image { flex: 1; height: 70%; position: relative; overflow: hidden; border: 1px solid var(--border); }
+        .timeline-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2); transition: filter 0.6s ease, transform 6s ease; }
+        .timeline-panel:hover .timeline-image img { filter: grayscale(0%) contrast(1.1); transform: scale(1.05); }
+
+        /* ================= PORTAFOLIO PARALLAX ================= */
+        .portfolio-section { padding: 15vh 5%; background-color: var(--bg-deep); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; }
+        .photo-card { position: relative; overflow: hidden; aspect-ratio: 3/4; border: 1px solid var(--border); }
+        .photo-card img { width: 100%; height: 125%; object-fit: cover; will-change: transform; filter: brightness(0.8); transition: filter 0.4s ease; }
+        .photo-card:hover img { filter: brightness(1.1); }
+        .photo-card-info {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 3rem 1.5rem 1.5rem 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--text-main);
+            transform: translateY(100%); transition: transform 0.4s ease; display: flex; justify-content: space-between;
+        }
+        .photo-card:hover .photo-card-info { transform: translateY(0); }
+
+        /* ================= FOOTER PREMIUM ================= */
+        .footer { padding: 10vh 5% 5vh 5%; background: var(--bg-base); border-top: 1px solid var(--border); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 5rem; }
+        .footer-brand h2 { font-size: 3rem; margin-bottom: 1rem; color: var(--text-main); }
+        .footer-brand p { color: var(--text-muted); max-width: 350px; font-weight: 300; line-height: 1.6; }
+        .footer-links h4 { font-size: 1rem; color: var(--text-main); margin-bottom: 1.5rem; letter-spacing: 1px; }
+        .footer-links ul { list-style: none; }
+        .footer-links ul li { margin-bottom: 0.8rem; font-size: 0.9rem; color: var(--text-muted); font-weight: 300; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+
+        /* ================= MODAL ROBUSTO INTERACTIVO (NUEVO) ================= */
+        .booking-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 10000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; padding: 2rem;
+        }
+
+        .booking-modal {
+            background: var(--bg-surface); border: 1px solid var(--border);
+            width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr 1.3fr;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative;
+            transform: translateY(40px) scale(0.95); overflow: hidden;
+        }
+
+        .close-modal {
+            position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none;
+            color: var(--text-main); font-size: 2rem; cursor: pointer; transition: color 0.3s ease; z-index: 10;
+        }
+        .close-modal:hover { color: var(--accent); }
+
+        /* Panel Izquierdo: Live Status */
+        .booking-info { background: var(--bg-deep); padding: 3rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between;}
+        .booking-info h3 { font-size: 2rem; margin-bottom: 1rem; }
+        .booking-info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.6; }
+        
+        .live-status-box {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 1.5rem; margin-bottom: 2rem; border-radius: 4px;
+        }
+        
+        .status-header { display: flex; align-items: center; gap: 10px; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); margin-bottom: 1rem; }
+        .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
+        
+        .selected-date-display {
+            font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: var(--text-main);
+            border-bottom: 1px solid #222; padding-bottom: 1rem; margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .availability-title { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem; display: block; }
+        .amenities-list { list-style: none; }
+        .amenities-list li { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; }
+        .amenities-list li::before { content: "✓"; color: var(--accent); }
+
+        /* Panel Derecho: Formulario y Calendario Interactivo */
+        .booking-form-wrapper { padding: 3rem; background: var(--bg-surface); overflow-y: auto; max-height: 85vh; }
+        .booking-form-wrapper h4 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+        
+        /* Custom Calendar Grid */
+        .custom-calendar {
+            background: var(--bg-deep); border: 1px solid var(--border);
+            padding: 1.5rem; margin-bottom: 2rem; border-radius: 4px;
+        }
+        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .cal-month { font-family: 'Space Mono', monospace; color: var(--accent); font-size: 1rem; font-weight: 700; text-transform: uppercase; }
+        .cal-nav-btn { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 0.3rem 0.8rem; cursor: pointer; transition: all 0.3s; }
+        .cal-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+        
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+        .cal-dow { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        
+        .cal-day {
+            background: var(--bg-surface); border: 1px solid transparent; color: var(--text-main);
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; padding: 0.8rem 0; cursor: pointer;
+            transition: all 0.3s ease; position: relative;
+        }
+        
+        .cal-day:hover:not(.disabled) { border-color: var(--accent); z-index: 2; }
+        
+        /* Estados del calendario */
+        .cal-day.disabled { color: #333; cursor: not-allowed; background: transparent; }
+        .cal-day.sold-out { color: #555; cursor: not-allowed; text-decoration: line-through; background: rgba(255,0,0,0.05); }
+        .cal-day.selected { background: var(--accent); color: #000; font-weight: 700; box-shadow: 0 0 15px var(--accent-glow); border-color: var(--accent); }
+
+        .cal-legend { display: flex; gap: 1rem; margin-top: 1rem; font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text-muted); justify-content: center; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .l-box { width: 10px; height: 10px; border-radius: 2px; }
+        .l-box.l-avail { background: var(--bg-surface); border: 1px solid var(--border); }
+        .l-box.l-sold { background: transparent; border: 1px solid #333; position: relative; }
+        .l-box.l-sold::after { content: ''; position: absolute; top: 4px; left: -2px; width: 12px; height: 1px; background: #555; transform: rotate(45deg); }
+        .l-box.l-sel { background: var(--accent); }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; }
+        .form-control { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--text-main); padding: 0.8rem 0; font-family: 'Inter', sans-serif; font-size: 1rem; transition: border-color 0.3s ease; }
+        .form-control:focus { outline: none; border-bottom-color: var(--accent); }
+        select.form-control { color: var(--text-muted); background: var(--bg-surface); cursor: pointer; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 1024px) {
+            .venues-grid { grid-template-columns: 1fr; }
+            .timeline-container { width: 100%; height: auto; flex-direction: column; }
+            .timeline-panel { width: 100%; height: auto; flex-direction: column; padding: 4rem 5%; gap: 2rem; }
+            .timeline-image { width: 100%; height: 40vh; }
+            .booking-modal { grid-template-columns: 1fr; max-height: 95vh; overflow-y: auto; }
+            .booking-info { border-right: none; border-bottom: 1px solid var(--border); padding: 2rem; }
+            .booking-form-wrapper { padding: 2rem; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 12vw; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; gap: 1rem; }
+            .cal-day { padding: 0.5rem 0; }
+        }
+
+        @media (max-width: 480px) { .gallery-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <!-- BOTÓN FLOTANTE SIEMPRE ACTIVO -->
+    <button class="floating-booking trigger-booking">
+        Verificar Fechas
+    </button>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="reveal-mask">
+                <h1 class="hero-title">CONSTRUIMOS EL</h1>
+            </div>
+            <div class="reveal-mask">
+                <h1 class="hero-title">ESTATUS DE TU NOCHE.</h1>
+            </div>
+            <p class="hero-desc">
+                Exclusividad documentada. Fotografía de alta gama para clubes, hoteles boutique y restaurantes que exigen una estética impecable y discreción absoluta.
+            </p>
+            <button class="btn-primary trigger-booking" style="opacity:0;" id="hero-btn">Solicitar Acceso</button>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE VENUES / ESCENARIOS -->
+    <section class="venues-section" id="escenarios">
+        <div class="section-header">
+            <h2>ESCENARIOS DOMINADOS</h2>
+            <p>>> LOS ESPACIOS MÁS EXCLUSIVOS NO TOLERAN FOTÓGRAFOS AMATEURS. ENTENDEMOS EL CÓDIGO DE LA NOCHE.</p>
+        </div>
+
+        <div class="venues-grid">
+            <div class="venue-card">
+                <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=1000&q=80" alt="Club Nocturno Exclusivo">
+                <div class="venue-info">
+                    <h3>NIGHTCLUBS VIP</h3>
+                    <p>El caos bajo control. Láseres, multitudes y energía cruda. Operamos en el centro de la pista sin alterar la atmósfera.</p>
+                </div>
+            </div>
+            <div class="venue-card">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/071/998/921/small/friends-party-in-nightclub-with-cocktail-and-toast-drink-fun-and-happiness-with-women-at-new-year-celebration-night-excited-with-alcohol-cocktails-and-cheers-with-energy-dance-and-drinks-photo.jpg?auto=format&fit=crop&w=1000&q=80" alt="Hotel Boutique Rooftop">
+                <div class="venue-info">
+                    <h3>HOTELES & ROOFTOPS</h3>
+                    <p>Lanzamientos y fiestas privadas. Iluminación controlada para un estatus intachable. Reflejamos el lujo del venue.</p>
+                </div>
+            </div>
+            <div class="venue-card">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80" alt="Restaurante Fine Dining">
+                <div class="venue-info">
+                    <h3>FINE DINING</h3>
+                    <p>Gastronomía, mixología y ambiente tenue. Elegancia documentada sin el uso invasivo de flashes directos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOSSIER INTERACTIVO (Scroll Pinning Horizontal) -->
+    <section class="timeline-section" id="metodologia">
+        <div class="timeline-header">
+            <h2>NUESTRA METODOLOGÍA</h2>
+            <p>>> DESGLOSE OPERATIVO: CÓMO OPERAMOS BAJO PRESIÓN</p>
+        </div>
+        
+        <div class="timeline-container">
+            <div class="timeline-panel">
+                <div class="timeline-text">
+                    <span class="timeline-time">22:30 PM // ARQUITECTURA</span>
+                    <h3>El Espacio como Protagonista</h3>
+                    <p>Antes de que llegue la multitud, capturamos el diseño del venue. Registramos la curaduría de la iluminación, la barra de mixología y la infraestructura. El estatus se comunica primero a través del espacio.</p>
+                </div>
+                <div class="timeline-image">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80" alt="Club vacío luces">
+                </div>
+            </div>
+            
+            <div class="timeline-panel">
+                <div class="timeline-text">
+                    <span class="timeline-time">01:15 AM // EL CLÍMAX</span>
+                    <h3>Inmersión Total</h3>
+                    <p>Abandonamos la periferia. Nos adentramos en la pista para capturar la euforia pura. Utilizamos técnicas de arrastre de obturador para transmitir la velocidad de la noche manteniendo sujetos nítidos.</p>
+                </div>
+                <div class="timeline-image">
+                    <img src="https://t4.ftcdn.net/jpg/08/37/21/55/360_F_837215595_G6LfltOgaLOXVD7KZ0KwNYlIikoUquni.jpg?auto=format&fit=crop&w=1000&q=80" alt="DJ y multitud">
+                </div>
+            </div>
+
+            <div class="timeline-panel">
+                <div class="timeline-text">
+                    <span class="timeline-time">02:45 AM // EXCLUSIVIDAD</span>
+                    <h3>High-End Lifestyle</h3>
+                    <p>Fotografía dirigida al cliente de alto valor. Capturamos la entrega de botellas y la estética de la zona VIP, preservando la discreción y operando como una extensión natural de tu marca.</p>
+                </div>
+                <div class="timeline-image">
+                    <img src="https://i.pinimg.com/736x/20/4c/b0/204cb047ba726395d1744141f37c20da.jpg?auto=format&fit=crop&w=1000&q=80" alt="Botellas VIP">
+                </div>
+            </div>
+
+            <div class="timeline-panel">
+                <div class="timeline-text">
+                    <span class="timeline-time">04:00 AM // CONVERSIÓN</span>
+                    <h3>El Activo Digital</h3>
+                    <p>Mientras tu equipo cierra el venue, entregamos resultados. Un preview curado es enviado inmediatamente a tu agencia de RP para dominar la conversación social de la mañana siguiente.</p>
+                    <button class="btn-primary trigger-booking" style="margin-top: 2rem;">Asegurar Impacto</button>
+                </div>
+                <div class="timeline-image">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1000&q=80" alt="Fiesta final">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTAFOLIO PARALLAX -->
+    <section class="portfolio-section" id="archivo">
+        <div class="section-header" style="margin-bottom: 8vh; text-align: center; justify-content: center;">
+            <h2>ARCHIVO VISUAL</h2>
+        </div>
+        
+        <div class="gallery-grid">
+            <div class="photo-card" data-speed="0.8">
+                <img src="https://images.pexels.com/photos/9005496/pexels-photo-9005496.jpeg?_gl=1*1fgetkl*_ga*MzkwNjAxNTMzLjE3ODIwMTU5MjQ.*_ga_8JE65Q40S6*czE3ODIwMTU5MjQkbzEkZzEkdDE3ODIwMTU5MzQkajUwJGwwJGgw?auto=format&fit=crop&w=800&q=80" alt="DJ Set Live">
+                <div class="photo-card-info">
+                    <span>CABINA DJ // MAIN STAGE</span>
+                    <span style="color: var(--accent);">01:10 AM</span>
+                </div>
+            </div>
+            <div class="photo-card" data-speed="1.15">
+                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" alt="Mixología fina">
+                <div class="photo-card-info">
+                    <span>MIXOLOGÍA // LOUNGE</span>
+                    <span style="color: var(--accent);">10:30 PM</span>
+                </div>
+            </div>
+            <div class="photo-card" data-speed="0.9">
+                <img src="https://s3-media0.fl.yelpcdn.com/bphoto/UUdGWG7WzMhC6h3SuactyQ/1000s.jpg?auto=format&fit=crop&w=800&q=80" alt="Multitud en Club">
+                <div class="photo-card-info">
+                    <span>PISTA // SOLD OUT</span>
+                    <span style="color: var(--accent);">03:15 AM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER PREMIUM -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>THE AFTERPARTY</h2>
+                <p>Operando mundialmente desde la sombra. Fotografía nocturna enfocada en rentabilidad, estatus y cultura visual.</p>
+                <button class="btn-primary trigger-booking" style="margin-top: 2rem; background: transparent; border: 1px solid var(--border); color: var(--text-main);">Agendar Cobertura</button>
+            </div>
+            
+            <div class="footer-links">
+                <h4>NAVEGACIÓN</h4>
+                <ul>
+                    <li><a href="#escenarios">Escenarios Dominados</a></li>
+                    <li><a href="#metodologia">Metodología</a></li>
+                    <li><a href="#archivo">Archivo Visual</a></li>
+                    <li><a href="#" class="trigger-booking" style="color: var(--accent);">Verificar Disponibilidad</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>CONEXIÓN</h4>
+                <ul>
+                    <li><a href="#">Instagram @TheAfterparty</a></li>
+                    <li><a href="#">TikTok @NightVisions</a></li>
+                    <li><a href="#">Vimeo / Director's Cut</a></li>
+                    <li><a href="mailto:vip@theafterparty.com">vip@theafterparty.com</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <span>&copy; 2024 THE AFTERPARTY. TODOS LOS DERECHOS RESERVADOS.</span>
+            <span>DISEÑO DE ALTA GAMA</span>
+        </div>
+    </footer>
+
+    <!-- MODAL ROBUSTO INTERACTIVO (SISTEMA DE PORTAL) -->
+    <div class="booking-overlay" id="bookingModal">
+        <div class="booking-modal">
+            <button class="close-modal" id="closeModal">&times;</button>
+            
+            <!-- Panel Izquierdo: Live Status -->
+            <div class="booking-info">
+                <div>
+                    <h3>PORTAL DE ACCESO</h3>
+                    <p>La exclusividad no se negocia. Selecciona tu fecha en el panel interactivo derecho. Los días tachados están irrevocablemente cerrados.</p>
+                    
+                    <div class="live-status-box">
+                        <div class="status-header">
+                            <div class="status-dot"></div>
+                            <span>SISTEMA CONECTADO // CALENDARIO EN VIVO</span>
+                        </div>
+                        <span class="availability-title" style="margin-bottom: 0.5rem;">Fecha Seleccionada para Cotización:</span>
+                        <div class="selected-date-display" id="displaySelectedDate">
+                            SELECCIONA UN DÍA >>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="availability-title">Amenidades VIP Incluidas</span>
+                    <ul class="amenities-list">
+                        <li>Entrega de Preview a las 3:00 AM.</li>
+                        <li>Galería Privada encriptada (Cero filtraciones).</li>
+                        <li>Cesión de derechos para campañas (Ads).</li>
+                        <li>Discreción absoluta en zonas VIP.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Panel Derecho: Formulario y Calendario -->
+            <div class="booking-form-wrapper">
+                <h4>SOLICITUD DE COBERTURA</h4>
+                
+                <!-- Calendario Interactivo Custom -->
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label>Disponibilidad Operativa</label>
+                    <div class="custom-calendar">
+                        <div class="cal-header">
+                            <button class="cal-nav-btn" id="prevMonth">&lt;</button>
+                            <span class="cal-month" id="monthLabel">MES AÑO</span>
+                            <button class="cal-nav-btn" id="nextMonth">&gt;</button>
+                        </div>
+                        <div class="cal-grid">
+                            <div class="cal-dow">DOM</div><div class="cal-dow">LUN</div><div class="cal-dow">MAR</div>
+                            <div class="cal-dow">MIE</div><div class="cal-dow">JUE</div><div class="cal-dow">VIE</div><div class="cal-dow">SAB</div>
+                            <!-- Los días se generan por JS -->
+                        </div>
+                        <div class="cal-legend">
+                            <div class="legend-item"><div class="l-box l-avail"></div> Disponible</div>
+                            <div class="legend-item"><div class="l-box l-sold"></div> Sold Out</div>
+                            <div class="legend-item"><div class="l-box l-sel"></div> Seleccionado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form>
+                    <!-- Input oculto que guarda la fecha elegida en el calendario -->
+                    <input type="hidden" id="hiddenDateInput" required>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre de la Marca / Venue</label>
+                            <input type="text" class="form-control" placeholder="Ej. Club X, Hotel Y..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Escenario</label>
+                            <select class="form-control" required>
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <option value="club">Antro / Nightclub</option>
+                                <option value="hotel">Hotel / Rooftop</option>
+                                <option value="restaurant">Fine Dining</option>
+                                <option value="festival">Festival Masivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Presupuesto Autorizado (USD)</label>
+                            <select class="form-control" required>
+                                <option value="" disabled selected>Rango de Inversión...</option>
+                                <option value="1">$1,000 - $2,500</option>
+                                <option value="2">$2,500 - $5,000</option>
+                                <option value="3">Más de $5,000</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Detalles Rápidos (Brief)</label>
+                            <input type="text" class="form-control" placeholder="DJs, expectativas..." required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%;" id="submitBtn">ENVIAR SOLICITUD AL EQUIPO</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- LÓGICA DE ANIMACIÓN E INTERACCIÓN -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Text Reveal (Hero)
+        const tlHero = gsap.timeline();
+        tlHero.to(".hero-title", { y: 0, duration: 1.2, stagger: 0.15, ease: "power4.out", delay: 0.2 })
+        .to(".hero-desc, #hero-btn", { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power2.out" }, "-=0.8");
+
+        gsap.to(".hero-bg", {
+            yPercent: 15, ease: "none",
+            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        // 2. Animación de Venues
+        gsap.from(".venue-card", {
+            scrollTrigger: { trigger: ".venues-section", start: "top 80%" },
+            y: 40, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
+        });
+
+        // 3. El Dossier Interactivo
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 1025px)", () => {
+            let container = document.querySelector(".timeline-container");
+            let scrollWidth = container.offsetWidth - window.innerWidth;
+            gsap.to(container, {
+                x: -scrollWidth, ease: "none",
+                scrollTrigger: {
+                    trigger: ".timeline-section", start: "top top", end: "+=" + scrollWidth,
+                    pin: true, scrub: 1, anticipatePin: 1
+                }
+            });
+        });
+
+        // 4. Portafolio Parallax
+        gsap.utils.toArray(".photo-card").forEach(card => {
+            let speed = card.getAttribute("data-speed"); 
+            let image = card.querySelector("img");
+            gsap.fromTo(card, { y: 60 * speed }, {
+                y: -30 * speed, ease: "none",
+                scrollTrigger: { trigger: ".portfolio-section", start: "top bottom", end: "bottom top", scrub: true }
+            });
+            gsap.fromTo(image, { y: "-10%" }, {
+                y: "10%", ease: "none",
+                scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        // ==========================================
+        // 5. LÓGICA DEL CALENDARIO INTERACTIVO VIP
+        // ==========================================
+        const dateDisplay = document.getElementById('displaySelectedDate');
+        const hiddenInput = document.getElementById('hiddenDateInput');
+        const monthLabel = document.getElementById('monthLabel');
+        const calGrid = document.querySelector('.cal-grid');
+        
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        
+        let today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+        let selectedDateElement = null;
+
+        function renderCalendar(month, year) {
+            // Limpiar días anteriores (mantener encabezados de la semana)
+            const dows = document.querySelectorAll('.cal-dow');
+            calGrid.innerHTML = '';
+            dows.forEach(dow => calGrid.appendChild(dow));
+
+            let firstDay = new Date(year, month, 1).getDay();
+            let daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+            // Espacios en blanco inicio de mes
+            for (let i = 0; i < firstDay; i++) {
+                let emptyDiv = document.createElement('div');
+                calGrid.appendChild(emptyDiv);
+            }
+
+            // Generar días
+            for (let i = 1; i <= daysInMonth; i++) {
+                let dayDiv = document.createElement('div');
+                dayDiv.classList.add('cal-day');
+                dayDiv.textContent = i;
+                
+                let checkDate = new Date(year, month, i);
+                
+                // Deshabilitar fechas pasadas
+                if (checkDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+                    dayDiv.classList.add('disabled');
+                } else {
+                    // Simular fechas "Sold Out" (Viernes y Sábados aleatorios o específicos para generar FOMO)
+                    let isWeekend = (checkDate.getDay() === 5 || checkDate.getDay() === 6);
+                    // Regla arbitraria para tachar días: los días que caen en 14, 15, 22, 28 si son fines de semana
+                    if (isWeekend && (i === 14 || i === 15 || i === 22 || i === 28 || i === 5)) {
+                        dayDiv.classList.add('sold-out');
+                    } else {
+                        // Día Disponible
+                        dayDiv.addEventListener('click', function() {
+                            if (selectedDateElement) {
+                                selectedDateElement.classList.remove('selected');
+                            }
+                            dayDiv.classList.add('selected');
+                            selectedDateElement = dayDiv;
+                            
+                            // Formatear fecha para el usuario
+                            let formattedDate = `${i} de ${monthNames[month]}, ${year}`;
+                            
+                            // Efecto GSAP para el texto del panel izquierdo
+                            gsap.to(dateDisplay, {opacity: 0, duration: 0.15, onComplete: () => {
+                                dateDisplay.textContent = formattedDate;
+                                dateDisplay.style.color = 'var(--accent)';
+                                gsap.to(dateDisplay, {opacity: 1, duration: 0.3});
+                            }});
+                            
+                            // Llenar el input invisible
+                            hiddenInput.value = `${year}-${(month+1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+                        });
+                    }
+                }
+                calGrid.appendChild(dayDiv);
+            }
+        }
+
+        document.getElementById('prevMonth').addEventListener('click', (e) => {
+            e.preventDefault();
+            currentYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
+            currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+            renderCalendar(currentMonth, currentYear);
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', (e) => {
+            e.preventDefault();
+            currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
+            currentMonth = (currentMonth + 1) % 12;
+            renderCalendar(currentMonth, currentYear);
+        });
+
+        // Inicializar Calendario
+        renderCalendar(currentMonth, currentYear);
+
+        // ==========================================
+        // LÓGICA DEL MODAL GSAP
+        // ==========================================
+        const modalOverlay = document.getElementById("bookingModal");
+        const modalBox = document.querySelector(".booking-modal");
+        const openBtns = document.querySelectorAll(".trigger-booking");
+        const closeBtn = document.getElementById("closeModal");
+
+        openBtns.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                gsap.to(modalOverlay, { autoAlpha: 1, duration: 0.4, ease: "power2.out" });
+                gsap.to(modalBox, { y: 0, scale: 1, duration: 0.5, ease: "back.out(1.2)", delay: 0.1 });
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        const closeModal = () => {
+            gsap.to(modalBox, { y: 40, scale: 0.95, duration: 0.3, ease: "power2.in" });
+            gsap.to(modalOverlay, { autoAlpha: 0, duration: 0.4, ease: "power2.in", delay: 0.1, onComplete: () => {
+                document.body.style.overflow = "auto";
+                document.body.style.overflowX = "hidden"; 
+            }});
+        };
+
+        closeBtn.addEventListener("click", closeModal);
+        modalOverlay.addEventListener("click", (e) => { if(e.target === modalOverlay) closeModal(); });
+
+        // Validación final antes de enviar
+        document.getElementById("submitBtn").addEventListener("click", (e) => {
+            if(!hiddenInput.value) {
+                e.preventDefault();
+                gsap.to(dateDisplay, {x: 10, yoyo: true, repeat: 3, duration: 0.1});
+                dateDisplay.textContent = "¡SELECCIONA UNA FECHA PRIMERO!";
+                dateDisplay.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>            
